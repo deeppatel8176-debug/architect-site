@@ -13,6 +13,13 @@ const QUICK_LINKS = [
 
 export default function SiteFooter() {
   const [email, setEmail] = useState("");
+  const [isSubscribed, setIsSubscribed] = useState(false);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email || !email.includes("@")) return;
+    setIsSubscribed(true);
+  };
 
   return (
     <footer className="w-full text-white font-sans" style={{ background: "transparent" }}>
@@ -37,32 +44,52 @@ export default function SiteFooter() {
               <h2 className="text-2xl md:text-3xl font-bold font-sans tracking-tighter leading-tight bg-gradient-to-br from-white via-white/95 to-white/50 bg-clip-text text-transparent">
                 Stay Connected
               </h2>
-              <p className="mt-4 text-sm text-neutral-400 font-sans tracking-tight leading-relaxed max-w-sm">
+              <p className="mt-3 text-sm text-neutral-400 font-sans tracking-tight leading-relaxed max-w-sm">
                 Join our curated newsletter for the latest architectural monographs and exclusive estate previews.
               </p>
             </div>
-            <form
-              className="flex items-center border border-white/15 rounded-xl overflow-hidden bg-white/5 focus-within:border-white/30 transition-colors"
-              onSubmit={(e) => e.preventDefault()}
-            >
-              <input
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                type="email"
-                placeholder="Enter your email"
-                className="flex-1 bg-transparent text-sm text-white placeholder:text-neutral-500 px-4 py-3 outline-none font-sans tracking-tight"
-              />
-              <button
-                type="submit"
-                aria-label="Subscribe"
-                className="px-4 py-3 bg-white text-black hover:bg-neutral-200 transition-colors flex items-center justify-center font-medium"
-              >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <line x1="22" y1="2" x2="11" y2="13" />
-                  <polygon points="22 2 15 22 11 13 2 9 22 2" />
+
+            {isSubscribed ? (
+              <div className="flex items-center gap-2.5 py-3 px-4 rounded-full bg-[#c9a96e]/10 border border-[#c9a96e]/30 text-[#c9a96e] text-xs font-sans tracking-wide animate-in fade-in duration-300 max-w-sm">
+                <svg className="w-4 h-4 text-[#c9a96e] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="20 6 9 17 4 12" />
                 </svg>
-              </button>
-            </form>
+                <span>Thank you. You are on the invitation list.</span>
+              </div>
+            ) : (
+              <form
+                className="relative flex items-center w-full max-w-sm rounded-full bg-white/[0.04] border border-white/15 hover:border-white/25 focus-within:border-[#c9a96e] focus-within:bg-white/[0.07] focus-within:shadow-[0_0_24px_rgba(201,169,110,0.18)] transition-all duration-300 p-1.5 pl-4"
+                onSubmit={handleSubmit}
+              >
+                <input
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  type="email"
+                  required
+                  placeholder="Enter your email address"
+                  className="flex-1 bg-transparent text-sm text-white placeholder:text-neutral-500 outline-none font-sans tracking-tight pr-2"
+                />
+                <button
+                  type="submit"
+                  aria-label="Subscribe to newsletter"
+                  className="shrink-0 h-9 px-4 rounded-full bg-gradient-to-r from-[#e6caa4] to-[#c9a96e] text-black hover:brightness-105 active:scale-95 transition-all duration-200 flex items-center gap-1.5 font-medium text-xs tracking-wider uppercase shadow-[0_2px_12px_rgba(201,169,110,0.3)] cursor-pointer group"
+                >
+                  <span>Join</span>
+                  <svg
+                    className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-0.5"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                    <polyline points="12 5 19 12 12 19" />
+                  </svg>
+                </button>
+              </form>
+            )}
           </div>
 
           {/* Col 2: Quick Links */}
