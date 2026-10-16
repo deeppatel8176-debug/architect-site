@@ -16,11 +16,8 @@ export default function Home() {
     <div className="relative w-full min-h-screen bg-black text-white selection:bg-white selection:text-black">
       {/* 3D Showcase Hero Section — full viewport with Hero-1 Horizon Background */}
       <section className="relative w-full h-screen overflow-hidden hero-1-bg">
-        {/* Background layer: Hero-1 Grid & Glowing Horizon Curved Arc */}
+        {/* Background layer: Glowing Horizon Curved Arc */}
         <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-          {/* Hero-1 Grid */}
-          <div className="hero-1-grid" />
-
           {/* Hero-1 Curved Planet / Horizon Glow */}
           <div className="hero-1-arc" />
         </div>
