@@ -80,17 +80,32 @@ export default function FooterBlock() {
   }
 
   return (
-    <section className="flex min-h-svh w-full flex-col justify-center bg-muted/30 px-6 py-16 text-foreground">
+    <section
+      className="w-full bg-black text-white font-sans overflow-hidden border-t border-white/10"
+      style={{
+        paddingTop: "5rem",
+        paddingBottom: "5rem",
+      }}
+    >
       <Toaster />
-      <footer className="mx-auto w-full max-w-6xl">
-        <div className="grid gap-12 lg:grid-cols-[1.2fr_2fr] lg:gap-16">
-          <div className="max-w-sm">
-            <a href="#" className="flex items-center gap-2">
+      <footer
+        className="w-full"
+        style={{
+          maxWidth: "1200px",
+          marginLeft: "auto",
+          marginRight: "auto",
+          paddingLeft: "2rem",
+          paddingRight: "2rem",
+        }}
+      >
+        <div className="grid gap-12 lg:grid-cols-[1.3fr_2fr] lg:gap-20 items-start">
+          <div className="max-w-md">
+            <a href="#" className="flex items-center gap-2.5">
               <svg
                 viewBox="0 0 24 24"
                 fill="currentColor"
                 aria-hidden="true"
-                className="size-6 shrink-0 text-primary"
+                className="size-6 shrink-0 text-[#c9a96e]"
               >
                 <rect
                   x="3"
@@ -121,30 +136,34 @@ export default function FooterBlock() {
                   transform="rotate(15 17 7)"
                 />
               </svg>
-              <span className="text-lg font-bold tracking-tight">Acme</span>
+              <span className="text-xl font-bold tracking-tight text-white font-sans">Acme</span>
             </a>
-            <h2 className="mt-6 font-heading text-xl font-bold tracking-tight">
+            <h2 className="mt-6 text-xl font-bold tracking-tight text-white font-sans">
               Ship faster with our newsletter
             </h2>
-            <p className="mt-2 text-sm text-muted-foreground">
+            <p className="mt-2 text-sm text-neutral-400 font-sans tracking-tight leading-relaxed">
               Product updates, new blocks, and engineering notes. One email a
               week, no spam.
             </p>
-            <form onSubmit={handleSubscribe} className="mt-5">
+            <form onSubmit={handleSubscribe} className="mt-6 select-auto">
               <Label htmlFor="footer-email" className="sr-only">
                 Email address
               </Label>
-              <div className="flex flex-col gap-2 sm:flex-row">
+              <div className="flex flex-col gap-2.5 sm:flex-row">
                 <Input
                   id="footer-email"
                   type="email"
                   placeholder="you@acme.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="bg-background sm:flex-1"
+                  className="bg-[#121212] border-white/15 focus:border-[#c9a96e] text-white placeholder:text-neutral-500 rounded-lg sm:flex-1 h-11 px-4"
                   required
                 />
-                <Button type="submit" disabled={subscribed}>
+                <Button
+                  type="submit"
+                  disabled={subscribed}
+                  className="h-11 px-6 rounded-lg bg-[#c9a96e] hover:bg-[#d6b06a] text-black font-semibold text-xs tracking-wider uppercase transition-all duration-200 active:scale-95 cursor-pointer shadow-md shrink-0 flex items-center justify-center gap-2"
+                >
                   {subscribed ? (
                     <>
                       <IconPlaceholder
@@ -175,8 +194,8 @@ export default function FooterBlock() {
             </form>
             <p
               className={cn(
-                "mt-3 text-xs text-muted-foreground transition-colors",
-                subscribed && "text-foreground",
+                "mt-3 text-xs text-neutral-500 transition-colors font-sans",
+                subscribed && "text-[#c9a96e]",
               )}
             >
               {subscribed
@@ -185,18 +204,18 @@ export default function FooterBlock() {
             </p>
           </div>
 
-          <div className="grid grid-cols-2 gap-8 sm:grid-cols-3">
+          <div className="grid grid-cols-2 gap-8 sm:grid-cols-3 sm:gap-12">
             {columns.map((col) => (
               <div key={col.title}>
-                <h3 className="font-heading text-sm font-bold tracking-tight">
+                <h3 className="text-xs uppercase tracking-widest font-semibold text-white/90 font-sans">
                   {col.title}
                 </h3>
-                <ul className="mt-4 flex flex-col gap-3">
+                <ul className="mt-4 flex flex-col gap-3 font-sans">
                   {col.links.map((link) => (
                     <li key={link}>
                       <a
                         href="#"
-                        className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+                        className="text-sm text-neutral-400 transition-colors hover:text-white font-sans tracking-tight"
                       >
                         {link}
                       </a>
@@ -208,19 +227,19 @@ export default function FooterBlock() {
           </div>
         </div>
 
-        <Separator className="mt-12" />
+        <Separator className="mt-14 mb-8 bg-white/10" />
 
-        <div className="flex flex-col items-start gap-4 pt-6 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-sm text-muted-foreground">
+        <div className="flex flex-col items-center gap-4 sm:flex-row sm:items-center sm:justify-between font-sans text-xs">
+          <p className="text-neutral-500 tracking-tight">
             &copy; 2026 Acme, Inc. All rights reserved.
           </p>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
             {socials.map((social) => (
               <a
                 key={social.label}
                 href="#"
                 aria-label={social.label}
-                className="rounded-md border border-border bg-background p-2 text-muted-foreground transition-colors hover:text-foreground"
+                className="w-9 h-9 rounded-full border border-white/15 bg-white/5 flex items-center justify-center text-neutral-400 transition-all hover:text-white hover:border-white/30 hover:bg-white/10"
               >
                 <social.icon className="size-4" aria-hidden="true" />
               </a>
