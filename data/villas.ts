@@ -102,7 +102,7 @@ export const VILLAS: VillaData[] = [
       "Defying alpine conditions, this geometric sculpture captures dramatic mountain peaks while maintaining a warm thermal envelope. Internal light shafts channel daylight deep within.",
     modelPath: "/models/villa-5/source/52.fbx",
     texturesPath: "/models/villa-5/textures/",
-    scaleMultiplier: 1.45,
+    scaleMultiplier: 1.74,
     yOffset: 0,
     rotationY: 0,
     cameraPosition: [16, 11, 16],
