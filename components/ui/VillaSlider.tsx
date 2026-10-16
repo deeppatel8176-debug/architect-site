@@ -9,27 +9,23 @@ export default function VillaSlider() {
   const setModelIndex = useStore((s) => s.setModelIndex);
   const nextModel = useStore((s) => s.nextModel);
   const prevModel = useStore((s) => s.prevModel);
-  const toggleAutoRotate = useStore((s) => s.toggleAutoRotate);
 
   const currentVilla = VILLAS[currentModelIndex] || VILLAS[0];
   const totalCount = String(VILLAS.length).padStart(2, "0");
 
-  // Keyboard navigation (Arrow keys + Spacebar)
+  // Keyboard navigation (Arrow keys)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "ArrowRight") {
         nextModel();
       } else if (e.key === "ArrowLeft") {
         prevModel();
-      } else if (e.key === " ") {
-        e.preventDefault();
-        toggleAutoRotate();
       }
     };
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [nextModel, prevModel, toggleAutoRotate]);
+  }, [nextModel, prevModel]);
 
   return (
     <div className="absolute bottom-10 md:bottom-12 left-0 right-0 z-30 px-6 flex justify-center pointer-events-none select-none">

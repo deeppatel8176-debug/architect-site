@@ -12,11 +12,11 @@ export default function Scene() {
 
   return (
     <div
-      className="absolute inset-0 w-full h-full transition-all duration-700 select-none overflow-hidden"
+      className="absolute inset-0 w-full h-full transition-all duration-700 select-none overflow-hidden cursor-grab active:cursor-grabbing"
     >
       <Canvas
         shadows
-        camera={{ position: [14.8, 9.8, 14.8], fov: 38 }}
+        camera={{ position: [12.8, 8.4, 12.8], fov: 38 }}
         gl={{
           antialias: true,
           alpha: true,

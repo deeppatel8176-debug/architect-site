@@ -76,9 +76,9 @@ export default function VillaModel({ villa }: VillaModelProps) {
         loadedObject.position.set(0, 0, 0);
         loadedObject.rotation.set(0, 0, 0);
 
-        // Standardize max horizontal footprint / dimension to ~10.8 units for comfortable clearance
+        // Standardize max horizontal footprint / dimension to ~14.2 units for a prominent, zoomed-in view
         const footprint = Math.max(size.x, size.z);
-        const targetFootprint = 10.8;
+        const targetFootprint = 14.2;
         const baseScale = footprint > 0 ? targetFootprint / footprint : 1;
         const finalScale = baseScale * (villa.scaleMultiplier ?? 1.0);
         loadedObject.scale.setScalar(finalScale);

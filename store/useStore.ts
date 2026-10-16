@@ -84,7 +84,7 @@ export const useStore = create<AppState>((set, get) => ({
   },
 
   // 360 Auto Rotation
-  isAutoRotating: true,
+  isAutoRotating: false,
   toggleAutoRotate: () => set((s) => ({ isAutoRotating: !s.isAutoRotating })),
   setAutoRotate: (val) => set({ isAutoRotating: val }),
   rotationSpeed: 0.8,

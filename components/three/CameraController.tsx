@@ -7,18 +7,18 @@ import * as THREE from "three";
 import { useStore, CameraPreset } from "@/store/useStore";
 import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 
-export const DEFAULT_CAMERA_POS: [number, number, number] = [14.8, 9.8, 14.8];
-export const DEFAULT_CAMERA_TARGET: [number, number, number] = [0, 0.8, 0];
+export const DEFAULT_CAMERA_POS: [number, number, number] = [12.8, 8.4, 12.8];
+export const DEFAULT_CAMERA_TARGET: [number, number, number] = [0, 0.9, 0];
 
 const PRESET_POSITIONS: Record<CameraPreset, [number, number, number]> = {
   iso: DEFAULT_CAMERA_POS,
-  front: [0, 3.8, 17.5],
-  top: [0.01, 22, 0.01],
-  entrance: [8.5, 3.0, 11],
+  front: [0, 3.4, 14.8],
+  top: [0.01, 18.0, 0.01],
+  entrance: [7.2, 2.6, 9.2],
 };
 
-const STORAGE_KEY_POS = "villa_atelier_camera_pos_v2";
-const STORAGE_KEY_TARGET = "villa_atelier_camera_target_v2";
+const STORAGE_KEY_POS = "villa_atelier_camera_pos_v4";
+const STORAGE_KEY_TARGET = "villa_atelier_camera_target_v4";
 
 export default function CameraController() {
   const controlsRef = useRef<OrbitControlsImpl>(null);
@@ -103,9 +103,13 @@ export default function CameraController() {
     <OrbitControls
       ref={controlsRef}
       enableDamping
-      dampingFactor={0.06}
+      dampingFactor={0.07}
       enableZoom={false}
+      enableRotate={true}
+      enablePan={false}
+      rotateSpeed={0.85}
       maxPolarAngle={Math.PI / 2 - 0.05} // Prevent camera from dipping below the plinth/ground level
+      minPolarAngle={0.15}
       target={DEFAULT_CAMERA_TARGET}
       onEnd={handleInteractionEnd}
       makeDefault
