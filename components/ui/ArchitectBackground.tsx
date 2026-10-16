@@ -31,45 +31,6 @@ export default function ArchitectBackground() {
        * Bottom 90px — clears VillaSlider (bottom-8 = 32px + bar ~40px + margin)
        */}
 
-      {/* Ghost title — centered, slightly above middle to align with model */}
-      <div
-        className="absolute left-0 right-0 flex flex-col items-center justify-center"
-        style={{
-          top: 90,
-          bottom: 120, /* push block upward slightly — model sits in upper-center */
-          transition: "opacity 0.35s cubic-bezier(0.4,0,0.2,1)",
-          opacity: visible ? 1 : 0,
-        }}
-      >
-        {words.map((word, i) => {
-          // Scale font by longest word char count to prevent overflow
-          const longestLen = Math.max(...words.map((w) => w.length));
-          const vwPerChar = Math.min(1.55, 90 / longestLen);
-          const vwSize = Math.min(12, words.length > 3 ? vwPerChar * 0.9 : vwPerChar);
-          return (
-            <span
-              key={`${word}-${i}`}
-              style={{
-                fontFamily:
-                  "'Cormorant Garamond', Cormorant, Garamond, Georgia, serif",
-                fontSize: `clamp(2.2rem, ${vwSize}vw, 7.5rem)`,
-                fontWeight: 700,
-                letterSpacing: "0.16em",
-                lineHeight: 0.92,
-                color: "transparent",
-                WebkitTextStroke: "1px rgba(255,255,255,0.068)",
-                whiteSpace: "nowrap",
-                display: "block",
-                textAlign: "center",
-                mixBlendMode: "screen",
-              }}
-            >
-              {word}
-            </span>
-          );
-        })}
-      </div>
-
       {/* Horizontal rule lines inside safe zone */}
       {[0.3, 0.5, 0.7].map((pct, i) => (
         <div
@@ -83,39 +44,6 @@ export default function ArchitectBackground() {
           }}
         />
       ))}
-
-      {/* Architect — upper-left, below nav */}
-      <div
-        className="absolute left-10 flex flex-col gap-1"
-        style={{
-          top: 108,
-          transition: "opacity 0.35s cubic-bezier(0.4,0,0.2,1)",
-          opacity: visible ? 1 : 0,
-        }}
-      >
-        <span
-          style={{
-            fontFamily: "Garamond, Georgia, serif",
-            fontSize: "0.55rem",
-            letterSpacing: "0.32em",
-            color: "rgba(255,255,255,0.13)",
-            textTransform: "uppercase",
-          }}
-        >
-          Architect
-        </span>
-        <span
-          style={{
-            fontFamily: "'Cormorant Garamond', Garamond, Georgia, serif",
-            fontSize: "0.75rem",
-            letterSpacing: "0.07em",
-            color: "rgba(255,255,255,0.21)",
-            fontStyle: "italic",
-          }}
-        >
-          {displayVilla.architect}
-        </span>
-      </div>
 
       {/* Location — upper-right, below nav */}
       <div
