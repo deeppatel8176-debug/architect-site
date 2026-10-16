@@ -297,8 +297,30 @@ export default function VillaModel({ villa }: VillaModelProps) {
     });
   }, [renderMode, modelScene, clayMaterial, wireframeMaterial]);
 
-  // Smooth continuous 360-degree rotation
+  // Graceful pedestal entrance animation when model appears
+  const introProgress = useRef(0);
+
+  useEffect(() => {
+    introProgress.current = 0;
+    if (modelGroupRef.current) {
+      modelGroupRef.current.scale.set(0.92, 0.92, 0.92);
+      modelGroupRef.current.position.y = -0.3;
+    }
+  }, [villa.id, modelScene]);
+
   useFrame((_, delta) => {
+    if (modelGroupRef.current && modelScene) {
+      if (introProgress.current < 1) {
+        introProgress.current = Math.min(1, introProgress.current + delta * 2.5);
+        const t = introProgress.current;
+        const ease = 1 - Math.pow(1 - t, 4); // Quartic ease-out
+
+        const s = 0.92 + 0.08 * ease;
+        modelGroupRef.current.scale.set(s, s, s);
+        modelGroupRef.current.position.y = (1 - ease) * -0.3;
+      }
+    }
+
     if (modelGroupRef.current && isAutoRotating) {
       modelGroupRef.current.rotation.y += delta * 0.35 * rotationSpeed;
     }

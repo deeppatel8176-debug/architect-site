@@ -212,3 +212,30 @@ img {
     top: calc(100% - 140px);
   }
 }
+
+/* ── Architectural Light-Blade Carousel Transition ── */
+@keyframes sweep-ltr {
+  0% {
+    transform: translate3d(-105%, 0, 0);
+  }
+  100% {
+    transform: translate3d(105%, 0, 0);
+  }
+}
+
+@keyframes sweep-rtl {
+  0% {
+    transform: translate3d(105%, 0, 0);
+  }
+  100% {
+    transform: translate3d(-105%, 0, 0);
+  }
+}
+
+.animate-sweep-ltr {
+  animation: sweep-ltr 0.58s cubic-bezier(0.7, 0, 0.3, 1) forwards;
+}
+
+.animate-sweep-rtl {
+  animation: sweep-rtl 0.58s cubic-bezier(0.7, 0, 0.3, 1) forwards;
+}
