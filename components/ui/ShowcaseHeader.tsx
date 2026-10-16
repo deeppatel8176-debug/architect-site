@@ -9,7 +9,7 @@ export default function ShowcaseHeader() {
     { label: "Work", href: "#villas" },
     { label: "About", href: "/about" },
     { label: "Blog", href: "/about" },
-    { label: "Contact", href: "/contact" },
+    { label: "Contact", href: "#contact" },
   ];
 
   return (

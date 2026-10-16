@@ -6,6 +6,7 @@ import ModelTransitionOverlay from "@/components/ui/ModelTransitionOverlay";
 import ModelLoader from "@/components/ui/ModelLoader";
 import GlobalFooter from "@/components/ui/GlobalFooter";
 import ArchitectBackground from "@/components/ui/ArchitectBackground";
+import StartProjectSection from "@/components/sections/StartProjectSection";
 
 const Scene = dynamic(() => import("@/components/three/Scene"), {
   ssr: false,
@@ -41,6 +42,9 @@ export default function Home() {
         {/* UI overlay — top layer */}
         <Overlay />
       </section>
+
+      {/* ── 04 — START A PROJECT: Tell us what you're building ── */}
+      <StartProjectSection />
 
       {/* Global Footer — transparent top blends with hero arc */}
       <div className="relative z-30">
