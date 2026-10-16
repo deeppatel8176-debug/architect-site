@@ -1,2 +1,1 @@
-export { default, default as Footer } from "./SiteFooter";
-
+export { default, default as Footer } from "./footer-3";
