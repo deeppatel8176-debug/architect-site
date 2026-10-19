@@ -84,7 +84,7 @@ export const useStore = create<AppState>((set, get) => ({
   },
 
   // 360 Auto Rotation
-  isAutoRotating: false,
+  isAutoRotating: true,
   toggleAutoRotate: () => set((s) => ({ isAutoRotating: !s.isAutoRotating })),
   setAutoRotate: (val) => set({ isAutoRotating: val }),
   rotationSpeed: 0.8,
@@ -93,7 +93,7 @@ export const useStore = create<AppState>((set, get) => ({
   // View Controls
   renderMode: "realistic",
   setRenderMode: (mode) => set({ renderMode: mode }),
-  lightingMode: "sunset",
+  lightingMode: "daylight",
   setLightingMode: (mode) => set({ lightingMode: mode }),
   cameraPreset: "iso",
   setCameraPreset: (preset) => set({ cameraPreset: preset }),

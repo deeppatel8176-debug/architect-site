@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { motion } from "framer-motion";
 import { toast } from "sonner";
 import { ArrowRight, Check } from "lucide-react";
 import { Toaster } from "@/components/ui/sonner";
@@ -75,14 +76,18 @@ export default function FooterBlock() {
 
   return (
     <section
-      className="relative w-full bg-black text-white font-sans overflow-hidden border-t border-white/10"
+      className="relative w-full bg-[#f5f4f2] text-[#111111] font-sans overflow-hidden border-t border-black/[0.07]"
       style={{
         paddingTop: "5rem",
         paddingBottom: "4.5rem",
       }}
     >
       <Toaster />
-      <footer
+      <motion.footer
+        initial={{ opacity: 0, y: 35 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-60px" }}
+        transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
         className="w-full"
         style={{
           maxWidth: "1200px",
@@ -98,53 +103,109 @@ export default function FooterBlock() {
           <div className="lg:col-span-5 max-w-md">
             {/* Logo */}
             <a href="#" className="inline-flex items-center gap-2.5">
-              <svg
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                aria-hidden="true"
-                className="size-6 shrink-0 text-[#c9a96e]"
-              >
-                <rect x="3" y="3" width="8" height="8" transform="rotate(-6 7 7)" />
-                <rect x="3" y="13" width="8" height="8" transform="rotate(5 7 17)" />
-                <rect x="13" y="13" width="8" height="8" transform="rotate(-4 17 17)" />
-                <rect x="13" y="3" width="8" height="8" transform="rotate(15 17 7)" />
-              </svg>
-              <span className="text-xl font-bold tracking-tight text-white font-sans">Acme</span>
+              <span className="relative flex h-7 w-7 items-center justify-center overflow-hidden rounded-[8px] bg-[#111111] text-white shadow-xs ring-1 ring-black/10">
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 32 32"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M9 10.5C9 9.67 9.67 9 10.5 9H22C22.55 9 23 9.45 23 10V11C23 11.55 22.55 12 22 12H13C12.45 12 12 12.45 12 13V14.5C12 15.05 12.45 15.5 13 15.5H19.5C21.43 15.5 23 17.07 23 19V21.5C23 22.33 22.33 23 21.5 23H10C9.45 23 9 22.55 9 22V21C9 20.45 9.45 20 10 20H19C19.55 20 20 19.55 20 19V17.5C20 16.95 19.55 16.5 19 16.5H12.5C10.57 16.5 9 14.93 9 13V10.5Z"
+                    fill="#F5F4F2"
+                  />
+                  <circle cx="21" cy="10.5" r="1.2" fill="#C5A880" />
+                  <circle cx="11" cy="21.5" r="1.2" fill="#C5A880" />
+                </svg>
+              </span>
+              <span className="text-xl font-bold tracking-tight text-[#111111] font-sans">
+                siddhatva design
+              </span>
             </a>
 
-            <h2 className="mt-5 text-xl font-bold tracking-tight text-white font-sans">
-              Ship faster with our newsletter
+            <h2 className="mt-5 text-xl font-bold tracking-tight text-[#111111] font-sans">
+              Architectural Journal &amp; Monographs
             </h2>
-            <p className="mt-2 text-sm text-neutral-400 font-sans tracking-tight leading-relaxed">
-              Product updates, new blocks, and engineering notes. One email a week, no spam.
+            <p className="mt-2 text-sm text-neutral-600 font-sans tracking-tight leading-relaxed">
+              New estate releases, physical walkthrough invites, and engineering documentation. Sent quarterly.
             </p>
 
-            {/* Seamless, perfectly aligned email box capsule */}
+            {/* TasteSkill Capsule Input Form */}
             <form onSubmit={handleSubscribe} className="mt-6 w-full select-auto">
-              <div className="relative flex items-center w-full rounded-xl bg-white/[0.05] border border-white/15 hover:border-white/25 focus-within:border-[#c9a96e] focus-within:ring-1 focus-within:ring-[#c9a96e]/30 transition-all p-1.5 backdrop-blur-sm">
+              <div
+                className="relative flex items-center w-full max-w-[440px] rounded-full bg-white border border-black/[0.1] hover:border-black/25 focus-within:border-black focus-within:ring-2 focus-within:ring-black/5 transition-all shadow-[0_1px_3px_rgba(10,10,10,0.04)]"
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  width: "100%",
+                  maxWidth: "440px",
+                  backgroundColor: "#ffffff",
+                  borderRadius: "9999px",
+                  padding: "5px 6px 5px 6px",
+                  boxSizing: "border-box",
+                }}
+              >
                 <input
                   id="footer-email"
                   type="email"
-                  placeholder="you@acme.com"
+                  placeholder="name@domain.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="flex-1 min-w-0 bg-transparent border-0 px-3.5 py-2 text-sm text-white placeholder:text-neutral-500 focus:outline-none focus:ring-0 font-sans"
+                  style={{
+                    flex: "1 1 0%",
+                    minWidth: 0,
+                    width: "100%",
+                    backgroundColor: "transparent",
+                    border: "none",
+                    outline: "none",
+                    boxShadow: "none",
+                    paddingLeft: "16px",
+                    paddingRight: "10px",
+                    paddingTop: "8px",
+                    paddingBottom: "8px",
+                    fontSize: "14px",
+                    color: "#111111",
+                    fontFamily: "inherit",
+                  }}
+                  className="placeholder:text-neutral-400 font-sans"
                   required
                 />
                 <button
                   type="submit"
                   disabled={subscribed}
-                  className="h-10 px-5 rounded-lg bg-[#c9a96e] hover:bg-[#d6b06a] text-black font-semibold text-xs tracking-wider uppercase transition-all duration-200 active:scale-95 cursor-pointer shadow-md shrink-0 flex items-center justify-center gap-2 font-sans"
+                  style={{
+                    flexShrink: 0,
+                    height: "36px",
+                    paddingLeft: "18px",
+                    paddingRight: "18px",
+                    borderRadius: "9999px",
+                    backgroundColor: "#111111",
+                    color: "#ffffff",
+                    fontSize: "12px",
+                    fontWeight: 600,
+                    letterSpacing: "0.06em",
+                    textTransform: "uppercase",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: "6px",
+                    border: "none",
+                    cursor: "pointer",
+                    boxShadow: "0 1px 2px rgba(0,0,0,0.1)",
+                    transition: "all 0.2s ease",
+                  }}
+                  className="hover:bg-neutral-800 active:scale-95 font-sans"
                 >
                   {subscribed ? (
                     <>
-                      <Check className="w-4 h-4" />
+                      <Check className="w-3.5 h-3.5" />
                       <span>Subscribed</span>
                     </>
                   ) : (
                     <>
                       <span>Subscribe</span>
-                      <ArrowRight className="w-4 h-4" />
+                      <ArrowRight className="w-3.5 h-3.5" />
                     </>
                   )}
                 </button>
@@ -153,16 +214,29 @@ export default function FooterBlock() {
               <p className="mt-3 text-xs text-neutral-500 font-sans transition-colors">
                 {subscribed
                   ? "Thanks for subscribing. Check your inbox to confirm."
-                  : "By subscribing you agree to our Privacy Policy."}
+                  : "By subscribing you agree to our confidential collector policy."}
               </p>
             </form>
           </div>
 
           {/* Right Columns: Navigation Links */}
           <div className="lg:col-span-7 grid grid-cols-2 sm:grid-cols-3 gap-8 sm:gap-12">
-            {columns.map((col) => (
+            {[
+              {
+                title: "Collection",
+                links: ["Monolith Sanctuary", "Kyoto Pavilion", "Obsidian Cliff", "Alpine Glasshouse", "Desert Minimal"],
+              },
+              {
+                title: "Standards",
+                links: ["BIM Tolerances", "Passive Daylight", "Quarry Curation", "Acoustic Isolation"],
+              },
+              {
+                title: "Studio",
+                links: ["Architectural Philosophy", "Selected Works", "Private Commissions", "Contact"],
+              },
+            ].map((col) => (
               <div key={col.title}>
-                <h3 className="text-xs uppercase tracking-widest font-semibold text-white/90 font-sans">
+                <h3 className="text-xs uppercase tracking-wider font-semibold text-[#111111] font-sans">
                   {col.title}
                 </h3>
                 <ul className="mt-4 flex flex-col gap-3 font-sans">
@@ -170,7 +244,7 @@ export default function FooterBlock() {
                     <li key={link}>
                       <a
                         href="#"
-                        className="text-sm text-neutral-400 transition-colors hover:text-white font-sans tracking-tight"
+                        className="text-sm text-neutral-600 transition-colors hover:text-[#111111] font-sans tracking-tight"
                       >
                         {link}
                       </a>
@@ -182,12 +256,12 @@ export default function FooterBlock() {
           </div>
         </div>
 
-        {/* Solid divider line with guaranteed clearance — no overlap */}
+        {/* Solid divider line */}
         <div
           className="w-full"
           style={{
             height: "1px",
-            backgroundColor: "rgba(255, 255, 255, 0.12)",
+            backgroundColor: "rgba(10, 10, 10, 0.08)",
             marginTop: "3.5rem",
             marginBottom: "2.5rem",
           }}
@@ -196,22 +270,22 @@ export default function FooterBlock() {
         {/* Bottom Row: Copyright + Optically Symmetrical Social Logos */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-6 font-sans text-xs">
           <p className="text-neutral-500 tracking-tight text-center sm:text-left">
-            &copy; 2026 Acme, Inc. All rights reserved.
+            &copy; 2026 siddhatva design, Inc. All rights reserved.
           </p>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2.5">
             {socials.map((social) => (
               <a
                 key={social.label}
                 href="#"
                 aria-label={social.label}
-                className="w-10 h-10 rounded-full border border-white/15 bg-white/[0.04] flex items-center justify-center text-neutral-400 hover:text-white hover:border-[#c9a96e]/60 hover:bg-[#c9a96e]/10 transition-all duration-200 shrink-0"
+                className="w-9 h-9 rounded-full border border-black/[0.08] bg-white flex items-center justify-center text-neutral-600 hover:text-black hover:border-black/20 hover:bg-neutral-50 transition-all duration-200 shrink-0 shadow-xs"
               >
                 <social.icon />
               </a>
             ))}
           </div>
         </div>
-      </footer>
+      </motion.footer>
     </section>
   );
 }

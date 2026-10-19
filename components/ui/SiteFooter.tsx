@@ -5,10 +5,10 @@ import Link from "next/link";
 
 const QUICK_LINKS = [
   { label: "Home", href: "/" },
-  { label: "About", href: "/about" },
-  { label: "Portfolio", href: "/#villas" },
-  { label: "Services", href: "/about" },
-  { label: "Contact", href: "/contact" },
+  { label: "Estates", href: "/#villas" },
+  { label: "Standards", href: "/#what-we-do" },
+  { label: "Exhibition", href: "/#exhibition" },
+  { label: "Contact", href: "/#contact" },
 ];
 
 export default function SiteFooter() {
@@ -194,7 +194,7 @@ export default function SiteFooter() {
           className="flex flex-col sm:flex-row items-center justify-between gap-4 font-sans text-xs"
         >
           <p className="text-neutral-500 tracking-tight">
-            &copy; {new Date().getFullYear()} Villa Atelier. All rights reserved.
+            &copy; {new Date().getFullYear()} siddhatva design. All rights reserved.
           </p>
           <div className="flex items-center gap-6">
             <Link href="#" className="text-neutral-500 hover:text-white transition-colors tracking-tight">Privacy Policy</Link>

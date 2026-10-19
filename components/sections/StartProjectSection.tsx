@@ -1,6 +1,20 @@
 "use client";
 
 import React, { useState } from "react";
+import { motion } from "framer-motion";
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 35 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.8,
+      delay: i * 0.12,
+      ease: [0.25, 0.46, 0.45, 0.94] as const,
+    },
+  }),
+};
 
 export default function StartProjectSection() {
   const [formData, setFormData] = useState({
@@ -19,79 +33,97 @@ export default function StartProjectSection() {
   return (
     <section
       id="contact"
-      className="relative w-full bg-black text-white font-sans overflow-hidden"
+      className="relative w-full bg-[#f5f4f2] text-[#111111] font-sans overflow-hidden border-t border-black/[0.07]"
       style={{
-        borderTop: "1px solid rgba(255, 255, 255, 0.1)",
-        paddingTop: "6rem",
-        paddingBottom: "7rem",
+        paddingTop: "6.5rem",
+        paddingBottom: "8rem",
       }}
     >
-      {/* Background Architectural Subtle Ambient Grid & Glow */}
-      <div className="absolute inset-0 pointer-events-none opacity-20 bg-[linear-gradient(to_right,#ffffff08_1px,transparent_1px),linear-gradient(to_bottom,#ffffff08_1px,transparent_1px)] bg-[size:4rem_4rem]" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-[#c9a96e]/[0.03] rounded-full blur-3xl pointer-events-none" />
+      {/* Background Architectural Ambient Grid */}
+      <div className="absolute inset-0 pointer-events-none opacity-35 bg-[linear-gradient(to_right,rgba(10,10,10,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(10,10,10,0.05)_1px,transparent_1px)] bg-[size:4rem_4rem]" />
 
-      {/* ── Perfectly Centered Container with proper margin ── */}
+      {/* ── Wider, Perfectly Centered Container with Generous Margins ── */}
       <div
-        className="relative z-10 w-full px-6 sm:px-8"
+        className="relative z-10 w-full"
         style={{
-          maxWidth: "760px",
+          maxWidth: "880px",
           marginLeft: "auto",
           marginRight: "auto",
+          paddingLeft: "clamp(1.5rem, 4vw, 3rem)",
+          paddingRight: "clamp(1.5rem, 4vw, 3rem)",
         }}
       >
-        {/* Header Block — Centered */}
-        <div className="flex flex-col items-center text-center">
-          {/* Eyebrow */}
-          <div className="flex items-center gap-3 mb-4">
-            <span className="w-8 h-[1.5px] bg-[#c9a96e]" />
-            <span className="text-xs uppercase tracking-[0.25em] text-[#c9a96e] font-semibold font-sans">
-              04 — START A PROJECT
-            </span>
-            <span className="w-8 h-[1.5px] bg-[#c9a96e]" />
-          </div>
-
-          {/* Heading in navbar font (font-sans) */}
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white tracking-tight leading-tight font-sans">
+        {/* Header Block — Centered with scroll reveal */}
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-60px" }}
+          className="flex flex-col items-center text-center"
+        >
+          {/* Heading */}
+          <motion.h2
+            custom={0}
+            variants={fadeUp}
+            className="text-3xl sm:text-4xl md:text-5xl font-semibold text-[#111111] tracking-[-0.04em] leading-tight"
+          >
             Tell us what you&apos;re building.
-          </h2>
+          </motion.h2>
 
           {/* Subtitle */}
-          <p className="mt-4 text-sm sm:text-base text-neutral-400 font-sans tracking-tight leading-relaxed max-w-lg">
-            A short note is enough. We&apos;ll reply within two business days with next steps — usually a 30-minute call.
-          </p>
-        </div>
+          <motion.p
+            custom={1}
+            variants={fadeUp}
+            className="mt-4 text-[15px] sm:text-base text-neutral-600 font-sans tracking-tight leading-relaxed max-w-xl"
+          >
+            A short note is enough. We&apos;ll reply within two business days with next steps — usually a 30-minute private consultation.
+          </motion.p>
+        </motion.div>
 
-        {/* Form Container */}
+        {/* Form Container — Spacious TasteSkill White Elevation Card with Generous Inset Padding & scroll reveal */}
         {isSubmitted ? (
-          <div className="mt-12 p-8 sm:p-10 rounded-2xl bg-white/[0.04] border border-[#c9a96e]/30 flex flex-col items-center text-center gap-4 animate-in fade-in duration-300 font-sans backdrop-blur-md">
-            <div className="w-12 h-12 rounded-full bg-[#c9a96e]/15 border border-[#c9a96e]/40 flex items-center justify-center text-[#c9a96e]">
-              <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <motion.div
+            initial={{ opacity: 0, y: 30, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+            className="mt-12 p-10 sm:p-14 md:p-16 rounded-3xl bg-white border border-black/[0.08] shadow-[0_1px_3px_rgba(10,10,10,0.04),0_28px_56px_-24px_rgba(10,10,10,0.12)] flex flex-col items-center text-center gap-4 font-sans"
+          >
+            <div className="w-14 h-14 rounded-full bg-neutral-100 border border-black/[0.08] flex items-center justify-center text-[#111111]">
+              <svg className="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <polyline points="20 6 9 17 4 12" />
               </svg>
             </div>
-            <span className="text-base uppercase tracking-widest font-semibold font-sans text-white">Inquiry Received</span>
-            <p className="text-sm text-neutral-300 font-sans leading-relaxed max-w-md">
-              Thank you, {formData.name}. Our architectural design directors will review your project brief and get in touch via <span className="text-white underline">{formData.email}</span> within two business days.
+            <span className="text-lg uppercase tracking-wider font-semibold font-sans text-[#111111]">
+              Inquiry Received
+            </span>
+            <p className="text-[15px] text-neutral-600 font-sans leading-relaxed max-w-md">
+              Thank you, {formData.name}. Our architectural design directors will review your project brief and get in touch via <span className="text-[#111111] font-semibold underline">{formData.email}</span> within two business days.
             </p>
             <button
               onClick={() => {
                 setIsSubmitted(false);
                 setFormData({ name: "", email: "", project: "" });
               }}
-              className="mt-4 px-6 py-2.5 rounded-full bg-white/10 hover:bg-white/20 text-xs tracking-widest uppercase text-[#c9a96e] hover:text-white transition-colors cursor-pointer font-semibold font-sans"
+              className="mt-6 px-7 py-3 rounded-full bg-neutral-100 hover:bg-neutral-200 border border-black/[0.08] text-xs tracking-wider uppercase text-[#111111] transition-colors cursor-pointer font-semibold font-sans"
             >
               ← Send another inquiry
             </button>
-          </div>
+          </motion.div>
         ) : (
-          <form
+          <motion.form
+            initial={{ opacity: 0, y: 40, scale: 0.98 }}
+            whileInView={{ opacity: 1, y: 0, scale: 1 }}
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ duration: 0.85, delay: 0.18, ease: [0.25, 0.46, 0.45, 0.94] }}
             onSubmit={handleSubmit}
-            className="mt-12 flex flex-col gap-6 font-sans select-auto"
+            style={{
+              padding: "clamp(2.5rem, 5vw, 4rem)",
+            }}
+            className="mt-12 rounded-3xl bg-white border border-black/[0.08] shadow-[0_1px_3px_rgba(10,10,10,0.04),0_28px_56px_-24px_rgba(10,10,10,0.12)] flex flex-col gap-7 sm:gap-8 font-sans select-auto"
           >
             {/* NAME */}
-            <div className="flex flex-col gap-2">
-              <label className="text-xs uppercase tracking-widest text-neutral-400 font-semibold font-sans">
-                NAME
+            <div className="flex flex-col gap-2.5">
+              <label className="text-[12.5px] uppercase tracking-wider text-neutral-700 font-semibold font-sans pl-1">
+                Name
               </label>
               <input
                 type="text"
@@ -99,14 +131,18 @@ export default function StartProjectSection() {
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                 placeholder="Your full name"
-                className="w-full bg-[#121212] border border-white/15 focus:border-[#c9a96e] focus:bg-[#181818] rounded-xl px-5 py-4 text-sm text-white placeholder:text-neutral-600 outline-none transition-all duration-200 font-sans tracking-tight"
+                style={{
+                  paddingLeft: "1.75rem",
+                  paddingRight: "1.75rem",
+                }}
+                className="w-full h-14 bg-[#faf9f6] border border-black/[0.1] focus:border-[#111111] focus:bg-white rounded-2xl text-[15px] text-[#111111] placeholder:text-neutral-400 outline-none transition-all duration-200 font-sans tracking-tight shadow-[inset_0_1px_2px_rgba(0,0,0,0.02)]"
               />
             </div>
 
             {/* EMAIL */}
-            <div className="flex flex-col gap-2">
-              <label className="text-xs uppercase tracking-widest text-neutral-400 font-semibold font-sans">
-                EMAIL
+            <div className="flex flex-col gap-2.5">
+              <label className="text-[12.5px] uppercase tracking-wider text-neutral-700 font-semibold font-sans pl-1">
+                Email
               </label>
               <input
                 type="email"
@@ -114,35 +150,43 @@ export default function StartProjectSection() {
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 placeholder="your.email@domain.com"
-                className="w-full bg-[#121212] border border-white/15 focus:border-[#c9a96e] focus:bg-[#181818] rounded-xl px-5 py-4 text-sm text-white placeholder:text-neutral-600 outline-none transition-all duration-200 font-sans tracking-tight"
+                style={{
+                  paddingLeft: "1.75rem",
+                  paddingRight: "1.75rem",
+                }}
+                className="w-full h-14 bg-[#faf9f6] border border-black/[0.1] focus:border-[#111111] focus:bg-white rounded-2xl text-[15px] text-[#111111] placeholder:text-neutral-400 outline-none transition-all duration-200 font-sans tracking-tight shadow-[inset_0_1px_2px_rgba(0,0,0,0.02)]"
               />
             </div>
 
             {/* PROJECT */}
-            <div className="flex flex-col gap-2">
-              <label className="text-xs uppercase tracking-widest text-neutral-400 font-semibold font-sans">
-                PROJECT
+            <div className="flex flex-col gap-2.5">
+              <label className="text-[12.5px] uppercase tracking-wider text-neutral-700 font-semibold font-sans pl-1">
+                Project Vision &amp; Location
               </label>
               <textarea
-                rows={4}
+                rows={5}
                 required
                 value={formData.project}
                 onChange={(e) => setFormData({ ...formData, project: e.target.value })}
                 placeholder="Tell us about your property location, architectural vision, or requirements..."
-                className="w-full bg-[#121212] border border-white/15 focus:border-[#c9a96e] focus:bg-[#181818] rounded-xl px-5 py-4 text-sm text-white placeholder:text-neutral-600 outline-none transition-all duration-200 resize-none h-36 font-sans tracking-tight"
+                style={{
+                  padding: "1.35rem 1.75rem",
+                }}
+                className="w-full h-44 bg-[#faf9f6] border border-black/[0.1] focus:border-[#111111] focus:bg-white rounded-2xl text-[15px] text-[#111111] placeholder:text-neutral-400 outline-none transition-all duration-200 resize-none font-sans tracking-tight shadow-[inset_0_1px_2px_rgba(0,0,0,0.02)]"
               />
             </div>
 
-            {/* Submit Button — Centered */}
+            {/* Submit Button — Centered TasteSkill Black Pill */}
             <div className="mt-4 flex justify-center">
               <button
                 type="submit"
-                className="w-full sm:w-auto px-12 py-4 bg-[#c9a96e] hover:bg-[#d6b06a] text-black font-sans font-semibold text-xs tracking-widest uppercase transition-all duration-200 active:scale-95 cursor-pointer shadow-[0_4px_24px_rgba(201,169,110,0.25)] rounded-full hover:shadow-[0_6px_28px_rgba(201,169,110,0.4)]"
+                className="w-full sm:w-auto min-w-[200px] h-13 px-10 bg-[#111111] hover:bg-neutral-800 text-white font-sans font-medium text-[15px] tracking-[-0.01em] transition-all duration-200 active:scale-97 cursor-pointer shadow-sm rounded-full flex items-center justify-center gap-2"
               >
-                Send inquiry
+                <span>Send inquiry</span>
+                <span>→</span>
               </button>
             </div>
-          </form>
+          </motion.form>
         )}
       </div>
     </section>

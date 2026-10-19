@@ -74,53 +74,46 @@ export default function ModelTransitionOverlay() {
           isLtr ? "animate-sweep-ltr" : "animate-sweep-rtl"
         }`}
       >
-        {/* Dark Obsidian Frosted Backdrop */}
-        <div className="absolute inset-0 bg-black/95 backdrop-blur-md" />
+        {/* TasteSkill Warm Paper Frosted Backdrop */}
+        <div className="absolute inset-0 bg-[#f5f4f2]/95 backdrop-blur-md border-x border-black/[0.08]" />
 
-        {/* Leading Edge: Radiant Champagne-Gold Light Blade */}
+        {/* Leading Edge: TasteSkill Crisp Ink Blade */}
         <div
           className={`absolute top-0 bottom-0 w-[2px] ${
             isLtr ? "right-0" : "left-0"
-          } bg-gradient-to-b from-transparent via-[#d4af37] to-transparent shadow-[0_0_50px_12px_rgba(212,175,55,0.5)]`}
-        />
-
-        {/* Secondary Shimmer Blade */}
-        <div
-          className={`absolute top-0 bottom-0 w-[1px] ${
-            isLtr ? "right-2" : "left-2"
-          } bg-gradient-to-b from-transparent via-white/80 to-transparent shadow-[0_0_20px_4px_rgba(255,255,255,0.7)]`}
+          } bg-gradient-to-b from-transparent via-[#111111] to-transparent shadow-[0_0_24px_4px_rgba(17,17,17,0.2)]`}
         />
 
         {/* Trailing Soft Vignette */}
         <div
           className={`absolute inset-y-0 w-32 ${
             isLtr
-              ? "right-0 bg-gradient-to-l from-[#d4af37]/15 to-transparent"
-              : "left-0 bg-gradient-to-r from-[#d4af37]/15 to-transparent"
+              ? "right-0 bg-gradient-to-l from-black/5 to-transparent"
+              : "left-0 bg-gradient-to-r from-black/5 to-transparent"
           }`}
         />
 
         {/* Center Minimal Architectural Title Badge */}
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6">
-          <div className="flex items-center gap-3 mb-2 opacity-80">
-            <span className="text-[10px] uppercase font-mono tracking-[0.3em] text-[#d4af37]">
+          <div className="flex items-center gap-3 mb-2 opacity-90">
+            <span className="text-[11px] uppercase font-mono tracking-[0.25em] text-neutral-500 font-semibold">
               Atelier Showcase
             </span>
-            <span className="w-1.5 h-1.5 rounded-full bg-[#d4af37]" />
-            <span className="text-xs font-mono font-bold tracking-widest text-white">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#111111]" />
+            <span className="text-xs font-mono font-bold tracking-widest text-[#111111]">
               {transition.number}
             </span>
           </div>
 
-          <h2 className="text-2xl md:text-4xl font-serif font-light tracking-[0.12em] text-white uppercase drop-shadow-[0_2px_16px_rgba(0,0,0,0.9)]">
+          <h2 className="text-2xl md:text-3xl font-semibold tracking-[-0.03em] text-[#111111] font-sans">
             {transition.name}
           </h2>
 
-          <p className="mt-2 text-xs md:text-sm tracking-[0.2em] uppercase text-neutral-400 font-sans">
+          <p className="mt-2 text-xs md:text-sm tracking-[0.1em] uppercase text-neutral-500 font-sans">
             {transition.location}
           </p>
 
-          <div className="mt-4 w-12 h-px bg-gradient-to-r from-transparent via-[#d4af37] to-transparent" />
+          <div className="mt-4 w-12 h-px bg-gradient-to-r from-transparent via-black/20 to-transparent" />
         </div>
       </div>
     </div>

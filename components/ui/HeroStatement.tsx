@@ -1,55 +1,163 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
+import { motion } from "framer-motion";
+
+const SCRAMBLE_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!@#$%&*";
+
+const LINES = [
+  "We design",
+  "Buildings",
+  "You can walk into",
+  "Before they exist",
+];
+
+const FULL_TEXT = LINES.join("\n");
+
+function getScrambled(target: string, progress: number): string {
+  return target
+    .split("")
+    .map((char) => {
+      if (char === "\n" || char === " ") return char;
+      if (Math.random() < progress) return char;
+      return SCRAMBLE_CHARS[Math.floor(Math.random() * SCRAMBLE_CHARS.length)];
+    })
+    .join("");
+}
+
+// ── Hover-scramble on a single character ──────────────────────────────────
+interface HoverLetterProps {
+  original: string;
+  display: string;
+  isResolved: boolean;
+}
+
+function HoverLetter({ original, display, isResolved }: HoverLetterProps) {
+  const [hoverChar, setHoverChar] = useState<string | null>(null);
+  const hoverRaf = useRef<number | null>(null);
+  const hoverStart = useRef<number>(0);
+  const HOVER_SCRAMBLE = 500;
+  const HOVER_RESOLVE  = 500;
+
+  const handleEnter = useCallback(() => {
+    if (original === " ") return;
+    if (hoverRaf.current) cancelAnimationFrame(hoverRaf.current);
+    hoverStart.current = performance.now();
+
+    const tick = (now: number) => {
+      const elapsed = now - hoverStart.current;
+      if (elapsed < HOVER_SCRAMBLE) {
+        setHoverChar(SCRAMBLE_CHARS[Math.floor(Math.random() * SCRAMBLE_CHARS.length)]);
+        hoverRaf.current = requestAnimationFrame(tick);
+      } else if (elapsed < HOVER_SCRAMBLE + HOVER_RESOLVE) {
+        const t = (elapsed - HOVER_SCRAMBLE) / HOVER_RESOLVE;
+        setHoverChar(Math.random() < t ? original : SCRAMBLE_CHARS[Math.floor(Math.random() * SCRAMBLE_CHARS.length)]);
+        hoverRaf.current = requestAnimationFrame(tick);
+      } else {
+        setHoverChar(null);
+      }
+    };
+
+    hoverRaf.current = requestAnimationFrame(tick);
+  }, [original]);
+
+  useEffect(() => () => { if (hoverRaf.current) cancelAnimationFrame(hoverRaf.current); }, []);
+
+  const shown = hoverChar ?? display;
+  const resolved = hoverChar === null && isResolved;
+
+  return (
+    <span
+      onMouseEnter={handleEnter}
+      style={{
+        display: "inline-block",
+        cursor: original !== " " ? "default" : undefined,
+        color: resolved ? "#111111" : "#6b6b6b",
+        fontFamily: resolved ? "inherit" : "monospace",
+        transition: "color 0.05s",
+        minWidth: original === " " ? "0.26em" : undefined,
+      }}
+    >
+      {shown}
+    </span>
+  );
+}
+
+// ── Periodic full-text scramble ────────────────────────────────────────────
+const SCRAMBLE_DURATION = 1600;
+const RESOLVE_DURATION  = 1400;
+const IDLE_DURATION     = 5000;
+const CYCLE = SCRAMBLE_DURATION + RESOLVE_DURATION + IDLE_DURATION;
 
 export default function HeroStatement() {
+  const [display, setDisplay] = useState(FULL_TEXT);
+  const rafRef   = useRef<number | null>(null);
+  const startRef = useRef<number>(0);
+
+  const runCycle = (startTime: number) => {
+    startRef.current = startTime;
+
+    const tick = (now: number) => {
+      const elapsed = now - startRef.current;
+
+      if (elapsed < SCRAMBLE_DURATION) {
+        const progress = (elapsed / SCRAMBLE_DURATION) * 0.12;
+        setDisplay(getScrambled(FULL_TEXT, progress));
+        rafRef.current = requestAnimationFrame(tick);
+      } else if (elapsed < SCRAMBLE_DURATION + RESOLVE_DURATION) {
+        const t = (elapsed - SCRAMBLE_DURATION) / RESOLVE_DURATION;
+        const eased = 1 - Math.pow(1 - t, 2.5);
+        setDisplay(getScrambled(FULL_TEXT, eased));
+        rafRef.current = requestAnimationFrame(tick);
+      } else {
+        setDisplay(FULL_TEXT);
+      }
+    };
+
+    rafRef.current = requestAnimationFrame(tick);
+  };
+
+  useEffect(() => {
+    runCycle(performance.now());
+    const interval = setInterval(() => runCycle(performance.now()), CYCLE);
+    return () => {
+      clearInterval(interval);
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const displayLines = display.split("\n");
+
   return (
-    <div className="absolute left-6 sm:left-10 lg:left-16 top-24 sm:top-28 lg:top-32 z-20 max-w-[90vw] sm:max-w-lg lg:max-w-xl xl:max-w-2xl pointer-events-none select-none">
-      {/* ── Eyebrow ── */}
-      <div className="flex items-center gap-2 mb-3 sm:mb-5">
-        <span className="w-1.5 h-1.5 rounded-full bg-[#c9a96e] shadow-[0_0_8px_#c9a96e]" />
-        <span className="text-[10px] sm:text-[11px] font-mono uppercase tracking-[0.22em] text-[#c9a96e] font-semibold drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
-          MERIDIAN STUDIO — ARCHITECTURE &amp; INTERIORS
-        </span>
-      </div>
-
-      {/* ── Editorial Headline Matching Reference ── */}
-      <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[4.2rem] xl:text-[4.75rem] font-serif font-light text-white leading-[1.03] tracking-[-0.015em] drop-shadow-[0_4px_28px_rgba(0,0,0,0.95)]">
-        We design <br />
-        buildings <br />
-        you can{" "}
-        <span
-          className="italic font-normal text-transparent bg-clip-text bg-gradient-to-r from-[#ecd5b5] via-[#d4af37] to-[#c9a96e] drop-shadow-[0_0_24px_rgba(212,175,55,0.45)]"
-          style={{ fontStyle: "italic" }}
-        >
-          walk into
-        </span>{" "}
-        <br />
-        before they exist.
+    <motion.div
+      initial={{ opacity: 0, y: 25 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] }}
+      className="flex min-w-0 flex-col items-start w-full max-w-[580px]"
+    >
+      <h1
+        id="hero-heading"
+        aria-label={LINES.join(" ")}
+        className="text-[38px] sm:text-[48px] lg:text-[54px] xl:text-[62px] font-bold leading-[1.08] tracking-[-0.04em] text-[#111111] flex flex-col items-start gap-1 sm:gap-1.5"
+      >
+        {displayLines.map((line, i) => (
+          <div key={i} className="flex whitespace-pre">
+            {line.split("").map((char, j) => {
+              const originalChar = LINES[i]?.[j] ?? char;
+              const isResolved = char === originalChar;
+              return (
+                <HoverLetter
+                  key={j}
+                  original={originalChar}
+                  display={char}
+                  isResolved={isResolved}
+                />
+              );
+            })}
+          </div>
+        ))}
       </h1>
-
-      {/* ── Subtitle / Paragraph ── */}
-      <p className="mt-5 sm:mt-7 text-xs sm:text-sm md:text-base text-neutral-400 font-sans tracking-tight leading-relaxed max-w-md drop-shadow-[0_2px_12px_rgba(0,0,0,0.95)]">
-        Interactive 3D models, real-time walkthroughs, and construction-grade documentation — built on the same precision that shapes tomorrow&apos;s architectural landmarks.
-      </p>
-
-      {/* ── Subtle Interactive Hint ── */}
-      <div className="mt-6 sm:mt-8 flex items-center gap-3">
-        <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.05] border border-white/10 backdrop-blur-md text-[10px] sm:text-[11px] font-mono tracking-widest text-neutral-300 shadow-lg">
-          <svg
-            className="w-3.5 h-3.5 text-[#c9a96e] animate-pulse"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <polyline points="15 18 9 12 15 6" />
-          </svg>
-          DRAG TO EXPLORE 3D
-        </span>
-      </div>
-    </div>
+    </motion.div>
   );
 }

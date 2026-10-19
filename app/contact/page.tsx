@@ -119,11 +119,11 @@ export default function ContactPage() {
         <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-10 py-5 bg-white/80 backdrop-blur-xl border-b border-black/[0.06] shadow-sm">
           <Link href="/" className="flex items-center gap-3 group">
             <div className="w-8 h-8 rounded-lg bg-neutral-900 border border-neutral-700 flex items-center justify-center shadow-md group-hover:scale-105 transition-transform">
-              <span className="font-serif text-[#e5c28a] text-sm font-semibold tracking-wider">VA</span>
+              <span className="font-serif text-[#e5c28a] text-sm font-semibold tracking-wider">SD</span>
             </div>
             <div className="flex flex-col">
               <span className="font-serif text-sm tracking-[0.2em] text-neutral-900 uppercase font-medium">
-                Villa Atelier
+                Siddhatva Design
               </span>
               <span className="text-[8px] tracking-[0.25em] text-[#9c7442] uppercase font-semibold">
                 Private Inquiries
@@ -140,10 +140,10 @@ export default function ContactPage() {
               <span className="hidden sm:inline">Back to</span> Showcase
             </Link>
             <Link
-              href="/about"
+              href="/#what-we-do"
               className="text-[11px] tracking-[0.2em] uppercase text-neutral-500 hover:text-neutral-900 font-medium transition-colors"
             >
-              About
+              Standards
             </Link>
           </div>
         </nav>

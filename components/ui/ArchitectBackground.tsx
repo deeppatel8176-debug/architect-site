@@ -40,7 +40,7 @@ export default function ArchitectBackground() {
             top: `calc(90px + (100vh - 180px) * ${pct})`,
             height: "1px",
             background:
-              "linear-gradient(to right, transparent 6%, rgba(255,255,255,0.04) 25%, rgba(255,255,255,0.055) 50%, rgba(255,255,255,0.04) 75%, transparent 94%)",
+              "linear-gradient(to right, transparent 6%, rgba(17,17,17,0.06) 25%, rgba(17,17,17,0.09) 50%, rgba(17,17,17,0.06) 75%, transparent 94%)",
           }}
         />
       ))}
@@ -56,23 +56,24 @@ export default function ArchitectBackground() {
       >
         <span
           style={{
-            fontFamily: "Garamond, Georgia, serif",
-            fontSize: "0.55rem",
-            letterSpacing: "0.32em",
-            color: "rgba(255,255,255,0.13)",
+            fontFamily: "var(--font-inter), sans-serif",
+            fontSize: "0.65rem",
+            letterSpacing: "0.25em",
+            color: "rgba(17,17,17,0.4)",
             textTransform: "uppercase",
+            fontWeight: 600,
           }}
         >
           Location
         </span>
         <span
           style={{
-            fontFamily: "'Cormorant Garamond', Garamond, Georgia, serif",
-            fontSize: "0.75rem",
-            letterSpacing: "0.07em",
-            color: "rgba(255,255,255,0.21)",
-            fontStyle: "italic",
+            fontFamily: "var(--font-inter), sans-serif",
+            fontSize: "0.82rem",
+            letterSpacing: "0.02em",
+            color: "rgba(17,17,17,0.75)",
             textAlign: "right",
+            fontWeight: 500,
           }}
         >
           {displayVilla.location}
@@ -88,20 +89,21 @@ export default function ArchitectBackground() {
           display: "flex",
           alignItems: "center",
           transition: "opacity 0.35s cubic-bezier(0.4,0,0.2,1)",
-          opacity: visible ? 0.22 : 0,
+          opacity: visible ? 0.35 : 0,
         }}
       >
         <span
           style={{
-            fontFamily: "Garamond, Georgia, serif",
-            fontSize: "0.55rem",
-            letterSpacing: "0.36em",
-            color: "rgba(255,255,255,1)",
+            fontFamily: "var(--font-inter), sans-serif",
+            fontSize: "0.6rem",
+            letterSpacing: "0.3em",
+            color: "rgba(17,17,17,0.8)",
             textTransform: "uppercase",
             writingMode: "vertical-rl",
+            fontWeight: 500,
           }}
         >
-          Villa Atelier · {displayVilla.year}
+          siddhatva design · {displayVilla.year}
         </span>
       </div>
 
@@ -114,18 +116,19 @@ export default function ArchitectBackground() {
           display: "flex",
           alignItems: "center",
           transition: "opacity 0.35s cubic-bezier(0.4,0,0.2,1)",
-          opacity: visible ? 0.22 : 0,
+          opacity: visible ? 0.35 : 0,
         }}
       >
         <span
           style={{
-            fontFamily: "Garamond, Georgia, serif",
-            fontSize: "0.55rem",
-            letterSpacing: "0.36em",
-            color: "rgba(255,255,255,1)",
+            fontFamily: "var(--font-inter), sans-serif",
+            fontSize: "0.6rem",
+            letterSpacing: "0.3em",
+            color: "rgba(17,17,17,0.8)",
             textTransform: "uppercase",
             writingMode: "vertical-rl",
             transform: "rotate(180deg)",
+            fontWeight: 500,
           }}
         >
           {displayVilla.style} · {displayVilla.area}

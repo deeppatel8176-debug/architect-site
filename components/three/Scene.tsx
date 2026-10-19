@@ -12,7 +12,7 @@ export default function Scene() {
 
   return (
     <div
-      className="absolute inset-0 w-full h-full transition-all duration-700 select-none overflow-hidden cursor-grab active:cursor-grabbing"
+      className="relative w-full h-full select-none overflow-hidden cursor-grab active:cursor-grabbing"
     >
       <Canvas
         shadows
