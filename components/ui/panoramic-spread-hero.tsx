@@ -11,16 +11,16 @@ import {
 } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 
-// Fresh, guaranteed working high-quality images (Architecture & Minimalist theme)
+// Authentic Studio Photography & Architectural Visualizations
 const IMAGES = [
-  { src: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=800&q=80", alt: "Luxury Living Room" },
-  { src: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=800&q=80", alt: "Modern Bedroom" },
-  { src: "https://images.unsplash.com/photo-1600210492493-0946911123ea?w=800&q=80", alt: "Minimalist Kitchen" },
-  { src: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80", alt: "Elegant Dining" },
-  { src: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800&q=80", alt: "Contemporary Sofa" },
-  { src: "https://images.unsplash.com/photo-1616137466211-f939a420be84?w=800&q=80", alt: "Spa Bathroom" },
-  { src: "https://images.unsplash.com/photo-1631679706909-1844bbd07221?w=800&q=80", alt: "Open Plan Living" },
-  { src: "https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?w=800&q=80", alt: "Study Room" },
+  { src: "/images/studio/project-interior-1.jpeg", alt: "Siddhatva Design - Fluted Oak Living Lounge & Indirect Coves" },
+  { src: "/images/studio/project-interior-2.jpeg", alt: "Siddhatva Design - Contemporary Master Suite & Custom Headboard" },
+  { src: "/images/studio/project-interior-4.jpeg", alt: "Siddhatva Design - Dining Pavilion & Architectural Lighting" },
+  { src: "/images/studio/project-interior-5.jpeg", alt: "Siddhatva Design - Minimalist Kitchen with Bronze Accents" },
+  { src: "/images/studio/project-interior-6.jpeg", alt: "Siddhatva Design - Executive Study & Acoustic Lounge" },
+  { src: "/images/studio/project-interior-7.jpeg", alt: "Siddhatva Design - Monolithic Stone Ensuite Bathroom" },
+  { src: "/images/studio/project-interior-8.jpeg", alt: "Siddhatva Design - Guest Pavilion with Recessed Ceiling Lighting" },
+  { src: "/images/studio/project-interior-10.jpeg", alt: "Siddhatva Design - Open Plan Living Landscape & Floor-to-Ceiling Glazing" },
 ];
 
 // Calculate a sweeping 3D arch around the center point for both mobile and desktop

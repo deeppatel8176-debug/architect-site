@@ -19,9 +19,6 @@ export default function VillaModel({ villa }: VillaModelProps) {
   const isAutoRotating = useStore((s) => s.isAutoRotating);
   const rotationSpeed = useStore((s) => s.rotationSpeed);
   const renderMode = useStore((s) => s.renderMode);
-  const showHotspots = useStore((s) => s.showHotspots);
-  const activeHotspot = useStore((s) => s.activeHotspot);
-  const setActiveHotspot = useStore((s) => s.setActiveHotspot);
 
   const setIsLoadingModel = useStore((s) => s.setIsLoadingModel);
   const setModelProgress = useStore((s) => s.setModelProgress);

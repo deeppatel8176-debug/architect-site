@@ -222,7 +222,10 @@ const CoverflowCarousel = ({
         })}
       </motion.div>
 
-      <div className="mt-4 flex items-center justify-center gap-4">
+      <div
+        className="mt-6 flex items-center justify-center gap-4"
+        style={{ marginTop: "24px", marginBottom: "28px" }}
+      >
         <SmoothButton
           aria-label="Previous slide"
           disabled={!loop && activeIndex === 0}
@@ -230,6 +233,11 @@ const CoverflowCarousel = ({
           shape="pill"
           size="sm"
           variant="outline"
+          style={{
+            paddingLeft: "20px",
+            paddingRight: "20px",
+            height: "40px",
+          }}
         >
           Prev
         </SmoothButton>
@@ -240,6 +248,11 @@ const CoverflowCarousel = ({
           shape="pill"
           size="sm"
           variant="outline"
+          style={{
+            paddingLeft: "20px",
+            paddingRight: "20px",
+            height: "40px",
+          }}
         >
           Next
         </SmoothButton>

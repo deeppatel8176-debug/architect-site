@@ -5,12 +5,16 @@ import ShowcaseHeader from "@/components/ui/ShowcaseHeader";
 import HeroStatement from "@/components/ui/HeroStatement";
 import TasteVillaCard from "@/components/ui/TasteVillaCard";
 import VillaCoverflowSection from "@/components/sections/VillaCoverflowSection";
-import VillaDetailsModal from "@/components/ui/VillaDetailsModal";
+import AboutStudioSection from "@/components/sections/AboutStudioSection";
 import ArchitecturalStandardsSection from "@/components/sections/ArchitecturalStandardsSection";
+import DesignProcessSection from "@/components/sections/DesignProcessSection";
 import PanoramicSpreadHero from "@/components/ui/panoramic-spread-hero";
+import InteriorGallerySection from "@/components/sections/InteriorGallerySection";
 import { TestimonialsSection } from "@/components/ui/testimonial-v2";
+import FAQSection from "@/components/sections/FAQSection";
 import StartProjectSection from "@/components/sections/StartProjectSection";
 import GlobalFooter from "@/components/ui/GlobalFooter";
+import VillaDetailsModal from "@/components/ui/VillaDetailsModal";
 
 export default function Home() {
   return (
@@ -18,12 +22,12 @@ export default function Home() {
       {/* ── Fixed Top Header Navigation ── */}
       <ShowcaseHeader />
 
-      {/* ── 01 — HERO SECTION: TasteSkill 2-Column Grid with 3D Model in Card ── */}
+      {/* ── 01 — HERO SECTION: 2-Column Grid with Interactive 3D Digital Twin ── */}
       <section
         aria-labelledby="hero-heading"
         className="relative isolate w-full overflow-x-clip min-h-[min(100svh,960px)] flex flex-col justify-center"
       >
-        {/* TasteSkill Organic Stone Texture Background */}
+        {/* Organic Stone Texture Background */}
         <div
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 -z-10 [mask-image:linear-gradient(to_bottom,black_45%,transparent_96%)]"
@@ -35,24 +39,24 @@ export default function Home() {
           />
         </div>
 
-        {/* Subtle TasteSkill Grid Lines */}
+        {/* Subtle Architectural Grid */}
         <div className="taste-grid -z-10" />
 
         {/* 2-Column Hero Grid: Left Copy, Right 3D Card Stack */}
         <div
           style={{
-            maxWidth: "1280px",
+            maxWidth: "1360px",
             marginLeft: "auto",
             marginRight: "auto",
-            paddingLeft: "clamp(1.5rem, 5vw, 3.5rem)",
-            paddingRight: "clamp(1.5rem, 5vw, 3.5rem)",
+            paddingLeft: "clamp(1.5rem, 5vw, 4rem)",
+            paddingRight: "clamp(1.5rem, 5vw, 4rem)",
           }}
-          className="w-full grid grid-cols-1 items-center gap-10 pb-16 pt-24 sm:pt-28 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.18fr)] lg:gap-12 xl:gap-16"
+          className="w-full grid grid-cols-1 items-center gap-12 pb-20 pt-28 sm:pt-32 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1.15fr)] lg:gap-14 xl:gap-20"
         >
-          {/* Left Column */}
+          {/* Left Column: Architectural Creed & Value Proposition */}
           <HeroStatement />
 
-          {/* Right Column: 3D Model Card */}
+          {/* Right Column: Interactive 3D Model Card */}
           <motion.div
             initial={{ opacity: 0, y: 35, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -64,22 +68,34 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── 02 — ESTATES MONOGRAPH 3D COVERFLOW CAROUSEL ── */}
+      {/* ── 02 — CURATED ESTATES & ARCHITECTURAL PORTFOLIO ── */}
       <VillaCoverflowSection />
 
-      {/* ── 03 — ARCHITECTURAL STANDARDS (What We Do Bento Grid) ── */}
+      {/* ── 03 — ABOUT SIDDHATVA DESIGN & MANIFESTO ── */}
+      <AboutStudioSection />
+
+      {/* ── 04 — ARCHITECTURE & INTERIOR SERVICES ── */}
       <ArchitecturalStandardsSection />
 
-      {/* ── 04 — PANORAMIC SPREAD HERO: 3D Curated Space Exhibition ── */}
+      {/* ── 05 — ARCHITECTURAL DESIGN METHODOLOGY & PROCESS ── */}
+      <DesignProcessSection />
+
+      {/* ── 06 — PANORAMIC SPREAD: 3D Curated Space Exhibition ── */}
       <PanoramicSpreadHero />
 
-      {/* ── 05 — PATRON TESTIMONIALS (3D Infinite Smooth Marquee) ── */}
+      {/* ── 07 — VISUAL ARCHIVE & INTERIOR GALLERY (With Lightbox) ── */}
+      <InteriorGallerySection />
+
+      {/* ── 08 — PATRON IMPRESSIONS & TESTIMONIALS ── */}
       <TestimonialsSection />
 
-      {/* ── 06 — START A PROJECT: Inquiry Form ── */}
+      {/* ── 09 — FREQUENTLY ASKED QUESTIONS ACCORDION ── */}
+      <FAQSection />
+
+      {/* ── 10 — START A PROJECT: Detailed Lead Generation Form ── */}
       <StartProjectSection />
 
-      {/* ── 04 — GLOBAL FOOTER ── */}
+      {/* ── 11 — GLOBAL REFINED FOOTER ── */}
       <div className="relative z-30">
         <GlobalFooter />
       </div>

@@ -44,6 +44,8 @@ interface AppState {
   setActiveHotspot: (id: string | null) => void;
   isDetailsModalOpen: boolean;
   setDetailsModalOpen: (open: boolean) => void;
+  selectedProjectId: string | null;
+  setSelectedProjectId: (id: string | null) => void;
 
   // Model Loading State
   isLoadingModel: boolean;
@@ -105,6 +107,8 @@ export const useStore = create<AppState>((set, get) => ({
   setActiveHotspot: (id) => set({ activeHotspot: id }),
   isDetailsModalOpen: false,
   setDetailsModalOpen: (open) => set({ isDetailsModalOpen: open }),
+  selectedProjectId: null,
+  setSelectedProjectId: (id) => set({ selectedProjectId: id }),
 
   // Model Loading
   isLoadingModel: false,

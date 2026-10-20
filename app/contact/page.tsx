@@ -1,85 +1,60 @@
 "use client";
 
 import { useState } from "react";
-import { ShaderBackground } from "@/components/ui/mesh-portfolio";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import Link from "next/link";
 import {
   ArrowLeft,
   Mail,
   Clock,
   Send,
-  CheckCircle2,
   ShieldCheck,
-  Compass,
   Building,
 } from "lucide-react";
 import GlobalFooter from "@/components/ui/GlobalFooter";
-
+import ShowcaseHeader from "@/components/ui/ShowcaseHeader";
 
 const fadeUp = {
-  hidden: { opacity: 0, y: 30 },
+  hidden: { opacity: 0, y: 24 },
   visible: (i: number) => ({
     opacity: 1,
     y: 0,
-    transition: { duration: 0.7, delay: i * 0.12, ease: [0.25, 0.46, 0.45, 0.94] as const },
+    transition: { duration: 0.6, delay: i * 0.1, ease: [0.25, 0.46, 0.45, 0.94] as const },
   }),
 };
 
-const ATELIER_OFFICES = [
+const STUDIO_LOCATIONS = [
   {
-    city: "Kyoto",
-    role: "Global Headquarters & Archives",
-    address: "Higashiyama-ku, Kyoto 605-0862",
-    contact: "+81 75 532 9000",
-    timezone: "JST (UTC+9)",
+    region: "Principal Studio Atelier",
+    location: "Ahmedabad / Surat, Gujarat, India",
+    focus: "Architectural Design, Concept Massing & Construction Documentation",
+    consultation: "By prior private appointment",
+    hours: "Monday – Friday: 10:00 AM – 7:00 PM IST",
   },
   {
-    city: "Beverly Hills",
-    role: "Americas Advisory & Private Client Desk",
-    address: "N. Canon Drive, Beverly Hills, CA 90210",
-    contact: "+1 310 882 1400",
-    timezone: "PST (UTC-8)",
-  },
-  {
-    city: "St. Moritz",
-    role: "Alpine & European Estates Atelier",
-    address: "Via Serlas, 7500 St. Moritz, Switzerland",
-    contact: "+41 81 833 4200",
-    timezone: "CET (UTC+1)",
-  },
-  {
-    city: "Paris",
-    role: "Architectural Curation & Publishing",
-    address: "Place Vendôme, 75001 Paris, France",
-    contact: "+33 1 42 68 7700",
-    timezone: "CET (UTC+1)",
+    region: "Virtual & Global Commissions",
+    location: "Online Video & Interactive 3D BIM Consultation",
+    focus: "Worldwide private client advisory, 3D digital twins & spatial planning",
+    consultation: "Scheduled across international time zones",
+    hours: "Flexible client coordination",
   },
 ];
 
-const VILLAS_LIST = [
-  "The Monolith Sanctuary (Kyoto, Japan)",
-  "Travertine Ridge Manor (Beverly Hills, USA)",
-  "The Geometric Haven (Zermatt, Switzerland)",
-  "Nordic Obsidian Villa (Stockholm Archipelago, Sweden)",
-  "The Elysian Palace (Aspen, Colorado)",
-  "Bespoke Architectural Commission",
-  "Private Estate Listing Inquiry",
+const COMMISSION_CATEGORIES = [
+  "Bespoke Villa Architecture",
+  "Luxury Residence Interior Architecture",
+  "Interactive 3D Digital Twin Simulation",
+  "Residential Renovation & Remodeling",
+  "Plot Feasibility & Preliminary Advisory",
 ];
 
 const BUDGET_TIERS = [
-  "$15,000,000 – $30,000,000",
-  "$30,000,000 – $60,000,000",
-  "$60,000,000 – $100,000,000",
-  "$100,000,000+",
-  "Private Advisory / Undisclosed",
-];
-
-// Rich warm amber & champagne palette for Contact
-const CONTACT_PALETTE: [[number, number, number], [number, number, number], [number, number, number]] = [
-  [0.985, 0.97, 0.95],
-  [0.96, 0.88, 0.72],
-  [0.90, 0.76, 0.52],
+  "Select a budget tier (Optional)",
+  "₹50 Lakhs – ₹1.5 Crore",
+  "₹1.5 Crore – ₹3 Crore",
+  "₹3 Crore – ₹7 Crore",
+  "₹7 Crore+",
+  "To be determined during consultation",
 ];
 
 export default function ContactPage() {
@@ -87,401 +62,414 @@ export default function ContactPage() {
     name: "",
     email: "",
     phone: "",
-    property: VILLAS_LIST[0],
-    budget: BUDGET_TIERS[1],
-    timeline: "Immediate (0-3 Months)",
-    ndaRequired: true,
-    message: "",
+    projectType: COMMISSION_CATEGORIES[0],
+    location: "",
+    approxArea: "",
+    budgetRange: "",
+    timeline: "Immediate (Next 1–2 months)",
+    brief: "",
+    honeypot: "",
   });
 
-  const [submitted, setSubmitted] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submissionResult, setSubmissionResult] = useState<{
+    success: boolean;
+    inquiryId?: string;
+    message?: string;
+  } | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const validate = () => {
+    const errs: Record<string, string> = {};
+    if (!formData.name.trim()) errs.name = "Full name is required.";
+    if (!formData.email.trim()) {
+      errs.email = "Email address is required.";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
+      errs.email = "Please enter a valid email address.";
+    }
+    if (!formData.location.trim()) errs.location = "Project location is required.";
+    if (!formData.brief.trim()) {
+      errs.brief = "Please provide a brief description of your project.";
+    } else if (formData.brief.trim().length < 10) {
+      errs.brief = "Brief must be at least 10 characters.";
+    }
+    setErrors(errs);
+    return Object.keys(errs).length === 0;
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!validate()) return;
+
     setIsSubmitting(true);
-    setTimeout(() => {
+    setSubmissionResult(null);
+
+    try {
+      const res = await fetch("/api/inquiry", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setSubmissionResult({
+          success: false,
+          message: data.error || "Submission failed. Please email us directly.",
+        });
+      } else {
+        setSubmissionResult({
+          success: true,
+          inquiryId: data.inquiryId,
+          message: data.message,
+        });
+      }
+    } catch {
+      setSubmissionResult({
+        success: false,
+        message: "Network error. Please try again or reach out to the studio directly.",
+      });
+    } finally {
       setIsSubmitting(false);
-      setSubmitted(true);
-    }, 1200);
+    }
   };
 
   return (
-    <div className="relative min-h-screen bg-[#faf8f5] text-neutral-900 overflow-x-hidden selection:bg-neutral-900 selection:text-white">
-      {/* Shader background */}
-      <ShaderBackground className="fixed inset-0 z-0 opacity-40" palette={CONTACT_PALETTE} />
+    <div className="relative w-full min-h-screen bg-[#f5f4f2] text-[#111111]">
+      <ShowcaseHeader />
 
-      {/* Light gradient overlay */}
-      <div className="fixed inset-0 z-[1] bg-gradient-to-b from-[#faf8f5]/85 via-[#faf8f5]/50 to-[#faf8f5]/90 pointer-events-none" />
-
-      <div className="relative z-10">
-        {/* ── Top Navigation Bar ──────────────────────────────── */}
-        <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-10 py-5 bg-white/80 backdrop-blur-xl border-b border-black/[0.06] shadow-sm">
-          <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-8 h-8 rounded-lg bg-neutral-900 border border-neutral-700 flex items-center justify-center shadow-md group-hover:scale-105 transition-transform">
-              <span className="font-serif text-[#e5c28a] text-sm font-semibold tracking-wider">SD</span>
-            </div>
-            <div className="flex flex-col">
-              <span className="font-serif text-sm tracking-[0.2em] text-neutral-900 uppercase font-medium">
-                Siddhatva Design
-              </span>
-              <span className="text-[8px] tracking-[0.25em] text-[#9c7442] uppercase font-semibold">
-                Private Inquiries
-              </span>
-            </div>
+      <main className="pt-28 pb-20">
+        <div
+          style={{
+            maxWidth: "1280px",
+            marginLeft: "auto",
+            marginRight: "auto",
+            paddingLeft: "clamp(1.5rem, 5vw, 3.5rem)",
+            paddingRight: "clamp(1.5rem, 5vw, 3.5rem)",
+          }}
+          className="w-full"
+        >
+          {/* Back Navigation Link */}
+          <Link
+            href="/"
+            className="inline-flex items-center gap-2 text-xs font-mono text-neutral-500 hover:text-black transition-colors mb-8"
+          >
+            <ArrowLeft className="w-3.5 h-3.5" />
+            <span>Return to Studio Portfolio</span>
           </Link>
 
-          <div className="flex items-center gap-6 md:gap-8">
-            <Link
-              href="/"
-              className="flex items-center gap-2 text-[11px] tracking-[0.2em] uppercase text-neutral-700 hover:text-black font-medium transition-colors"
-            >
-              <ArrowLeft size={13} />
-              <span className="hidden sm:inline">Back to</span> Showcase
-            </Link>
-            <Link
-              href="/#what-we-do"
-              className="text-[11px] tracking-[0.2em] uppercase text-neutral-500 hover:text-neutral-900 font-medium transition-colors"
-            >
-              Standards
-            </Link>
+          {/* Page Header */}
+          <div className="max-w-3xl mb-14">
+            <div className="inline-flex items-center gap-2 rounded-full border border-black/[0.08] bg-white/80 py-1 px-3.5 text-[12px] font-mono uppercase tracking-widest text-neutral-600 shadow-2xs backdrop-blur-sm mb-4">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#111111]" />
+              Private Client Consultation Desk
+            </div>
+
+            <h1 className="text-4xl sm:text-5xl font-semibold tracking-[-0.04em] text-[#111111] leading-tight">
+              Initiate your architectural commission.
+            </h1>
+
+            <p className="mt-4 text-base text-neutral-600 leading-relaxed">
+              Every commission begins with a focused discussion between client and studio directors. We review plot constraints, lifestyle requirements, and aesthetic direction to determine how our practice can best realize your vision.
+            </p>
           </div>
-        </nav>
 
-        {/* ── Hero Header ─────────────────────────────────────── */}
-        <header className="pt-36 pb-16 px-6 md:px-12 max-w-7xl mx-auto text-center">
-          <motion.p
-            custom={0}
-            variants={fadeUp}
-            initial="hidden"
-            animate="visible"
-            className="text-[10px] tracking-[0.45em] uppercase text-[#9c7442] font-semibold mb-5"
-          >
-            Discreet Acquisition & Advisory
-          </motion.p>
-          <motion.h1
-            custom={1}
-            variants={fadeUp}
-            initial="hidden"
-            animate="visible"
-            className="font-serif text-5xl md:text-7xl lg:text-8xl font-light tracking-tight text-neutral-900 mb-6"
-          >
-            Initiate a <em className="italic text-[#9c7442]">Dialogue</em>
-          </motion.h1>
-          <motion.p
-            custom={2}
-            variants={fadeUp}
-            initial="hidden"
-            animate="visible"
-            className="max-w-2xl mx-auto text-neutral-600 text-sm md:text-base leading-relaxed tracking-wide font-light"
-          >
-            Our monograph represents an extraordinary portfolio of confidential estates.
-            Connect directly with our Principal Partners for private viewings, bespoke commissions,
-            and acquisitions.
-          </motion.p>
-        </header>
+          {/* 2-Column Grid: Form on Left, Studio Presence on Right */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+            {/* Form Column (7 cols) */}
+            <div className="lg:col-span-7">
+              {submissionResult?.success ? (
+                <div className="p-8 sm:p-12 rounded-3xl bg-white border border-black/[0.08] shadow-sm flex flex-col items-center text-center gap-4">
+                  <div className="w-14 h-14 rounded-full bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-700">
+                    <ShieldCheck className="w-7 h-7" />
+                  </div>
 
-        {/* ── Main Content Grid: Form & Atelier Info ───────────── */}
-        <section className="max-w-7xl mx-auto px-6 md:px-12 pb-28">
-          <div className="grid lg:grid-cols-12 gap-12 lg:gap-16 items-start">
-            {/* Left Column: Inquiry Form (7 cols) */}
-            <motion.div
-              variants={fadeUp}
-              custom={2}
-              initial="hidden"
-              animate="visible"
-              className="lg:col-span-7 bg-white/90 backdrop-blur-2xl border border-black/[0.08] rounded-3xl p-8 md:p-12 shadow-xl relative overflow-hidden"
-            >
-              <div className="flex items-center justify-between mb-8 pb-6 border-b border-black/[0.06]">
-                <div>
-                  <h2 className="font-serif text-2xl font-light text-neutral-900 tracking-wide">
-                    Private Dossier Request
+                  <span className="text-[11px] font-mono uppercase tracking-widest text-neutral-400">
+                    Reference: {submissionResult.inquiryId}
+                  </span>
+
+                  <h2 className="text-2xl font-semibold text-[#111111]">
+                    Inquiry Received
                   </h2>
-                  <p className="text-[11px] text-[#9c7442] tracking-wider uppercase mt-1 font-semibold">
-                    Confidential · Direct Partner Response
+
+                  <p className="text-sm text-neutral-600 leading-relaxed max-w-md">
+                    Thank you, <span className="font-semibold text-neutral-900">{formData.name}</span>. Our studio principals will review your brief and contact you via <span className="underline font-semibold text-neutral-900">{formData.email}</span> within two business days.
                   </p>
-                </div>
-                <div className="flex items-center gap-2 text-[10px] text-neutral-600 uppercase tracking-widest bg-black/[0.03] border border-black/[0.08] px-3 py-1.5 rounded-full font-medium">
-                  <ShieldCheck size={14} className="text-[#9c7442]" />
-                  <span>Strict NDA</span>
-                </div>
-              </div>
 
-              <AnimatePresence mode="wait">
-                {submitted ? (
-                  <motion.div
-                    key="success"
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0 }}
-                    className="py-16 text-center space-y-6"
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSubmissionResult(null);
+                      setFormData({
+                        name: "",
+                        email: "",
+                        phone: "",
+                        projectType: COMMISSION_CATEGORIES[0],
+                        location: "",
+                        approxArea: "",
+                        budgetRange: "",
+                        timeline: "Immediate (Next 1–2 months)",
+                        brief: "",
+                        honeypot: "",
+                      });
+                    }}
+                    className="mt-4 px-6 py-2.5 rounded-full bg-neutral-100 hover:bg-neutral-200 text-xs font-medium text-neutral-800 transition-colors cursor-pointer"
                   >
-                    <div className="w-16 h-16 mx-auto rounded-full bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-600">
-                      <CheckCircle2 size={32} />
-                    </div>
-                    <div className="space-y-2">
-                      <h3 className="font-serif text-3xl font-light text-neutral-900">
-                        Dossier Request Received
-                      </h3>
-                      <p className="text-sm text-neutral-600 max-w-md mx-auto leading-relaxed">
-                        Thank you, <span className="font-medium text-neutral-900">{formData.name}</span>. A Private Client Partner will review your acquisition parameters and contact you within 12 hours under encrypted protocols.
-                      </p>
-                    </div>
-                    <div className="pt-4">
-                      <button
-                        onClick={() => setSubmitted(false)}
-                        className="text-xs uppercase tracking-[0.25em] text-[#9c7442] hover:text-black font-semibold border-b border-[#9c7442]/40 pb-1 transition-colors"
-                      >
-                        Submit Another Inquiry
-                      </button>
-                    </div>
-                  </motion.div>
-                ) : (
-                  <form onSubmit={handleSubmit} className="space-y-6">
-                    <div className="grid md:grid-cols-2 gap-6">
-                      <div className="space-y-2">
-                        <label className="text-[10px] tracking-[0.2em] uppercase text-neutral-500 font-semibold block">
-                          Full Name *
-                        </label>
-                        <input
-                          type="text"
-                          required
-                          value={formData.name}
-                          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                          placeholder="Lord / Lady / Mr. / Ms."
-                          className="w-full bg-black/[0.03] border border-black/10 rounded-xl px-4 py-3 text-sm text-neutral-900 placeholder-neutral-400 focus:outline-none focus:border-[#9c7442] focus:bg-white transition-colors"
-                        />
-                      </div>
+                    Submit Another Brief
+                  </button>
+                </div>
+              ) : (
+                <form
+                  onSubmit={handleSubmit}
+                  noValidate
+                  className="rounded-3xl bg-white border border-black/[0.08] shadow-sm space-y-6"
+                  style={{
+                    paddingLeft: "clamp(24px, 5vw, 44px)",
+                    paddingRight: "clamp(24px, 5vw, 44px)",
+                    paddingTop: "clamp(28px, 5vw, 40px)",
+                    paddingBottom: "clamp(28px, 5vw, 40px)",
+                  }}
+                >
+                  {/* Honeypot field for spam prevention */}
+                  <div className="hidden" aria-hidden="true">
+                    <label htmlFor="hp_contact">Leave empty</label>
+                    <input
+                      id="hp_contact"
+                      type="text"
+                      value={formData.honeypot}
+                      onChange={(e) => setFormData({ ...formData, honeypot: e.target.value })}
+                      tabIndex={-1}
+                    />
+                  </div>
 
-                      <div className="space-y-2">
-                        <label className="text-[10px] tracking-[0.2em] uppercase text-neutral-500 font-semibold block">
-                          Confidential Email *
-                        </label>
-                        <input
-                          type="email"
-                          required
-                          value={formData.email}
-                          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                          placeholder="client@familyoffice.com"
-                          className="w-full bg-black/[0.03] border border-black/10 rounded-xl px-4 py-3 text-sm text-neutral-900 placeholder-neutral-400 focus:outline-none focus:border-[#9c7442] focus:bg-white transition-colors"
-                        />
-                      </div>
+                  {submissionResult?.success === false && (
+                    <div className="p-4 rounded-xl bg-red-50 border border-red-200 text-red-800 text-xs">
+                      {submissionResult.message}
                     </div>
+                  )}
 
-                    <div className="grid md:grid-cols-2 gap-6">
-                      <div className="space-y-2">
-                        <label className="text-[10px] tracking-[0.2em] uppercase text-neutral-500 font-semibold block">
-                          Direct Phone / Signal / WhatsApp
-                        </label>
-                        <input
-                          type="tel"
-                          value={formData.phone}
-                          onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                          placeholder="+1 (555) 000-0000"
-                          className="w-full bg-black/[0.03] border border-black/10 rounded-xl px-4 py-3 text-sm text-neutral-900 placeholder-neutral-400 focus:outline-none focus:border-[#9c7442] focus:bg-white transition-colors"
-                        />
-                      </div>
-
-                      <div className="space-y-2">
-                        <label className="text-[10px] tracking-[0.2em] uppercase text-neutral-500 font-semibold block">
-                          Estate of Interest
-                        </label>
-                        <select
-                          value={formData.property}
-                          onChange={(e) => setFormData({ ...formData, property: e.target.value })}
-                          className="w-full bg-black/[0.03] border border-black/10 rounded-xl px-4 py-3 text-sm text-neutral-900 focus:outline-none focus:border-[#9c7442] focus:bg-white transition-colors cursor-pointer"
-                        >
-                          {VILLAS_LIST.map((villa) => (
-                            <option key={villa} value={villa} className="bg-white text-neutral-900">
-                              {villa}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                    </div>
-
-                    <div className="grid md:grid-cols-2 gap-6">
-                      <div className="space-y-2">
-                        <label className="text-[10px] tracking-[0.2em] uppercase text-neutral-500 font-semibold block">
-                          Capital Allocation Range
-                        </label>
-                        <select
-                          value={formData.budget}
-                          onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
-                          className="w-full bg-black/[0.03] border border-black/10 rounded-xl px-4 py-3 text-sm text-neutral-900 focus:outline-none focus:border-[#9c7442] focus:bg-white transition-colors cursor-pointer"
-                        >
-                          {BUDGET_TIERS.map((tier) => (
-                            <option key={tier} value={tier} className="bg-white text-neutral-900">
-                              {tier}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-
-                      <div className="space-y-2">
-                        <label className="text-[10px] tracking-[0.2em] uppercase text-neutral-500 font-semibold block">
-                          Acquisition Timeline
-                        </label>
-                        <select
-                          value={formData.timeline}
-                          onChange={(e) => setFormData({ ...formData, timeline: e.target.value })}
-                          className="w-full bg-black/[0.03] border border-black/10 rounded-xl px-4 py-3 text-sm text-neutral-900 focus:outline-none focus:border-[#9c7442] focus:bg-white transition-colors cursor-pointer"
-                        >
-                          <option value="Immediate (0-3 Months)" className="bg-white text-neutral-900">Immediate (0-3 Months)</option>
-                          <option value="Within 6 Months" className="bg-white text-neutral-900">Within 6 Months</option>
-                          <option value="Long Term / Horizon 2026-2027" className="bg-white text-neutral-900">Long Term / Horizon 2026-2027</option>
-                          <option value="Private Research / Commission" className="bg-white text-neutral-900">Private Research / Commission</option>
-                        </select>
-                      </div>
-                    </div>
-
-                    <div className="space-y-2">
-                      <label className="text-[10px] tracking-[0.2em] uppercase text-neutral-500 font-semibold block">
-                        Architectural Requirements & Special Directives
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    <div>
+                      <label htmlFor="c-name" className="block text-xs font-medium text-neutral-700 mb-1.5">
+                        Full Name <span className="text-red-500">*</span>
                       </label>
-                      <textarea
-                        rows={4}
-                        value={formData.message}
-                        onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                        placeholder="Please include specific requirements regarding privacy envelopes, helipads, subterranean galleries, or bespoke structural modifications..."
-                        className="w-full bg-black/[0.03] border border-black/10 rounded-xl px-4 py-3 text-sm text-neutral-900 placeholder-neutral-400 focus:outline-none focus:border-[#9c7442] focus:bg-white transition-colors resize-none"
-                      />
-                    </div>
-
-                    <div className="flex items-center gap-3 pt-2">
                       <input
-                        type="checkbox"
-                        id="nda"
-                        checked={formData.ndaRequired}
-                        onChange={(e) => setFormData({ ...formData, ndaRequired: e.target.checked })}
-                        className="rounded border-black/20 bg-black/[0.03] text-neutral-900 focus:ring-0 cursor-pointer w-4 h-4"
+                        id="c-name"
+                        type="text"
+                        required
+                        placeholder="Your full name"
+                        value={formData.name}
+                        onChange={(e) => {
+                          setFormData({ ...formData, name: e.target.value });
+                          if (errors.name) setErrors({ ...errors, name: "" });
+                        }}
+                        className={`w-full px-4 py-3 rounded-xl border text-sm text-[#111111] bg-[#faf9f6] focus:bg-white focus:outline-none transition-colors ${
+                          errors.name ? "border-red-400" : "border-black/10 focus:border-black"
+                        }`}
                       />
-                      <label htmlFor="nda" className="text-xs text-neutral-600 cursor-pointer select-none">
-                        Execute mutual bilateral Non-Disclosure Agreement (NDA) prior to releasing full architectural drawings & spatial coordinates.
-                      </label>
+                      {errors.name && <p className="text-[11px] text-red-600 mt-1">{errors.name}</p>}
                     </div>
 
+                    <div>
+                      <label htmlFor="c-email" className="block text-xs font-medium text-neutral-700 mb-1.5">
+                        Email Address <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        id="c-email"
+                        type="email"
+                        required
+                        placeholder="name@example.com"
+                        value={formData.email}
+                        onChange={(e) => {
+                          setFormData({ ...formData, email: e.target.value });
+                          if (errors.email) setErrors({ ...errors, email: "" });
+                        }}
+                        className={`w-full px-4 py-3 rounded-xl border text-sm text-[#111111] bg-[#faf9f6] focus:bg-white focus:outline-none transition-colors ${
+                          errors.email ? "border-red-400" : "border-black/10 focus:border-black"
+                        }`}
+                      />
+                      {errors.email && <p className="text-[11px] text-red-600 mt-1">{errors.email}</p>}
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    <div>
+                      <label htmlFor="c-phone" className="block text-xs font-medium text-neutral-700 mb-1.5">
+                        Phone Number <span className="text-neutral-400">(Optional)</span>
+                      </label>
+                      <input
+                        id="c-phone"
+                        type="tel"
+                        placeholder="+91..."
+                        value={formData.phone}
+                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                        className="w-full px-4 py-3 rounded-xl border border-black/10 bg-[#faf9f6] focus:bg-white focus:border-black focus:outline-none text-sm text-[#111111] transition-colors"
+                      />
+                    </div>
+
+                    <div>
+                      <label htmlFor="c-type" className="block text-xs font-medium text-neutral-700 mb-1.5">
+                        Commission Type <span className="text-red-500">*</span>
+                      </label>
+                      <select
+                        id="c-type"
+                        value={formData.projectType}
+                        onChange={(e) => setFormData({ ...formData, projectType: e.target.value })}
+                        className="w-full px-4 py-3 rounded-xl border border-black/10 bg-[#faf9f6] focus:bg-white focus:border-black focus:outline-none text-sm text-[#111111] transition-colors"
+                      >
+                        {COMMISSION_CATEGORIES.map((cat) => (
+                          <option key={cat} value={cat}>
+                            {cat}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    <div>
+                      <label htmlFor="c-loc" className="block text-xs font-medium text-neutral-700 mb-1.5">
+                        Project Location / City <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        id="c-loc"
+                        type="text"
+                        required
+                        placeholder="e.g. Ahmedabad, Surat, Mumbai"
+                        value={formData.location}
+                        onChange={(e) => {
+                          setFormData({ ...formData, location: e.target.value });
+                          if (errors.location) setErrors({ ...errors, location: "" });
+                        }}
+                        className={`w-full px-4 py-3 rounded-xl border text-sm text-[#111111] bg-[#faf9f6] focus:bg-white focus:outline-none transition-colors ${
+                          errors.location ? "border-red-400" : "border-black/10 focus:border-black"
+                        }`}
+                      />
+                      {errors.location && <p className="text-[11px] text-red-600 mt-1">{errors.location}</p>}
+                    </div>
+
+                    <div>
+                      <label htmlFor="c-budget" className="block text-xs font-medium text-neutral-700 mb-1.5">
+                        Budget Range <span className="text-neutral-400">(Optional)</span>
+                      </label>
+                      <select
+                        id="c-budget"
+                        value={formData.budgetRange}
+                        onChange={(e) => setFormData({ ...formData, budgetRange: e.target.value })}
+                        className="w-full px-4 py-3 rounded-xl border border-black/10 bg-[#faf9f6] focus:bg-white focus:border-black focus:outline-none text-sm text-[#111111] transition-colors"
+                      >
+                        {BUDGET_TIERS.map((tier) => (
+                          <option key={tier} value={tier}>
+                            {tier}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label htmlFor="c-brief" className="block text-xs font-medium text-neutral-700 mb-1.5">
+                      Project Brief <span className="text-red-500">*</span>
+                    </label>
+                    <textarea
+                      id="c-brief"
+                      rows={5}
+                      required
+                      placeholder="Describe your site, spatial needs, design goals, or specific materials..."
+                      value={formData.brief}
+                      onChange={(e) => {
+                        setFormData({ ...formData, brief: e.target.value });
+                        if (errors.brief) setErrors({ ...errors, brief: "" });
+                      }}
+                      className={`w-full px-4 py-3 rounded-xl border text-sm text-[#111111] bg-[#faf9f6] focus:bg-white focus:outline-none transition-colors ${
+                        errors.brief ? "border-red-400" : "border-black/10 focus:border-black"
+                      }`}
+                    />
+                    {errors.brief && <p className="text-[11px] text-red-600 mt-1">{errors.brief}</p>}
+                  </div>
+
+                  <div className="pt-2">
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className="w-full mt-4 bg-neutral-900 hover:bg-black text-white font-medium tracking-[0.2em] uppercase text-xs py-4 px-6 rounded-xl transition-all shadow-lg flex items-center justify-center gap-2 group disabled:opacity-50 cursor-pointer"
+                      className="w-full px-8 py-3.5 rounded-full bg-[#111111] hover:bg-neutral-800 disabled:bg-neutral-400 text-white font-medium text-sm transition-all shadow-sm cursor-pointer flex items-center justify-center gap-2"
                     >
                       {isSubmitting ? (
-                        <span>Encrypting & Transmitting...</span>
+                        <span>Sending Brief...</span>
                       ) : (
                         <>
-                          <span>Transmit Private Inquiry</span>
-                          <Send size={14} className="group-hover:translate-x-1 transition-transform text-[#e5c28a]" />
+                          <span>Submit Architectural Brief</span>
+                          <Send className="w-4 h-4" />
                         </>
                       )}
                     </button>
-                  </form>
-                )}
-              </AnimatePresence>
-            </motion.div>
+                  </div>
+                </form>
+              )}
+            </div>
 
-            {/* Right Column: Global Ateliers & Protocol (5 cols) */}
-            <motion.div
-              variants={fadeUp}
-              custom={3}
-              initial="hidden"
-              animate="visible"
-              className="lg:col-span-5 space-y-8"
-            >
-              {/* Direct Partner Desks */}
-              <div className="bg-white/90 backdrop-blur-xl border border-black/[0.08] rounded-3xl p-8 space-y-6 shadow-md">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-black/[0.04] border border-black/10 flex items-center justify-center text-[#9c7442]">
-                    <Mail size={18} />
+            {/* Studio Info Column (5 cols) */}
+            <div className="lg:col-span-5 space-y-6">
+              {STUDIO_LOCATIONS.map((loc, idx) => (
+                <div
+                  key={idx}
+                  className="rounded-3xl bg-white border border-black/[0.08] shadow-2xs space-y-3"
+                  style={{
+                    paddingLeft: "26px",
+                    paddingRight: "26px",
+                    paddingTop: "24px",
+                    paddingBottom: "24px",
+                  }}
+                >
+                  <div className="flex items-center gap-2">
+                    <Building className="w-4 h-4 text-neutral-600" />
+                    <span className="text-xs font-mono uppercase tracking-wider text-neutral-400 font-semibold">
+                      {loc.region}
+                    </span>
                   </div>
-                  <div>
-                    <h3 className="font-serif text-lg text-neutral-900 font-medium">Direct Partner Desks</h3>
-                    <p className="text-[10px] text-neutral-400 uppercase tracking-widest font-semibold">Always Available</p>
-                  </div>
-                </div>
 
-                <div className="space-y-4 pt-2 border-t border-black/[0.06]">
-                  <div>
-                    <p className="text-[10px] uppercase tracking-wider text-[#9c7442] font-semibold">Principal Acquisitions Desk</p>
-                    <a
-                      href="mailto:partner@villaatelier.luxury"
-                      className="text-sm text-neutral-900 hover:text-black font-mono tracking-wide transition-colors font-medium"
-                    >
-                      partner@villaatelier.luxury
-                    </a>
-                  </div>
-                  <div>
-                    <p className="text-[10px] uppercase tracking-wider text-[#9c7442] font-semibold">Private Family Offices & Trust</p>
-                    <a
-                      href="mailto:trust@villaatelier.luxury"
-                      className="text-sm text-neutral-900 hover:text-black font-mono tracking-wide transition-colors font-medium"
-                    >
-                      trust@villaatelier.luxury
-                    </a>
-                  </div>
-                  <div>
-                    <p className="text-[10px] uppercase tracking-wider text-[#9c7442] font-semibold">Encrypted Signal Concierge</p>
-                    <p className="text-sm text-neutral-900 font-mono tracking-wide font-medium">
-                      +81 90 7714 8820
-                    </p>
-                  </div>
-                </div>
-              </div>
+                  <h3 className="text-base font-semibold text-[#111111]">
+                    {loc.location}
+                  </h3>
 
-              {/* Global Atelier Locations */}
-              <div className="bg-white/90 backdrop-blur-xl border border-black/[0.08] rounded-3xl p-8 space-y-6 shadow-md">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-black/[0.04] border border-black/10 flex items-center justify-center text-[#9c7442]">
-                      <Compass size={18} />
-                    </div>
-                    <div>
-                      <h3 className="font-serif text-lg text-neutral-900 font-medium">Global Ateliers</h3>
-                      <p className="text-[10px] text-neutral-400 uppercase tracking-widest font-semibold">Private Consultations</p>
-                    </div>
-                  </div>
-                  <Building size={16} className="text-neutral-400" />
-                </div>
-
-                <div className="space-y-4 pt-2 border-t border-black/[0.06]">
-                  {ATELIER_OFFICES.map((office) => (
-                    <div key={office.city} className="group border-b border-black/[0.04] pb-3 last:border-0 last:pb-0">
-                      <div className="flex items-center justify-between">
-                        <span className="font-serif text-base text-neutral-900 group-hover:text-[#9c7442] transition-colors font-medium">
-                          {office.city}
-                        </span>
-                        <span className="text-[9px] font-mono text-neutral-400 uppercase">
-                          {office.timezone}
-                        </span>
-                      </div>
-                      <p className="text-[11px] text-neutral-600">{office.role}</p>
-                      <div className="flex items-center justify-between text-[11px] font-mono text-neutral-500 mt-1">
-                        <span>{office.address}</span>
-                        <span className="text-[#9c7442] font-medium">{office.contact}</span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Protocols Alert */}
-              <div className="border border-black/[0.08] bg-white/70 rounded-2xl p-5 flex items-start gap-4 shadow-sm">
-                <Clock size={18} className="text-[#9c7442] mt-0.5 shrink-0" />
-                <div className="text-xs space-y-1">
-                  <p className="text-neutral-900 font-medium">Bespoke Viewing Protocol</p>
-                  <p className="text-neutral-600 leading-relaxed font-light">
-                    Physical viewings are arranged via private helicopter or chartered transport with direct security clearance.
+                  <p className="text-xs leading-relaxed text-neutral-600">
+                    {loc.focus}
                   </p>
+
+                  <div className="pt-3 border-t border-black/[0.05] space-y-1 text-xs text-neutral-500">
+                    <div className="flex items-center gap-2">
+                      <Clock className="w-3.5 h-3.5 text-neutral-400" />
+                      <span>{loc.hours}</span>
+                    </div>
+                    <div className="font-mono text-[11px] text-neutral-400">
+                      {loc.consultation}
+                    </div>
+                  </div>
                 </div>
+              ))}
+
+              {/* Consultation Note */}
+              <div
+                className="rounded-3xl bg-[#faf9f6] border border-black/[0.08] text-xs text-neutral-600 leading-relaxed space-y-2"
+                style={{
+                  paddingLeft: "26px",
+                  paddingRight: "26px",
+                  paddingTop: "24px",
+                  paddingBottom: "24px",
+                }}
+              >
+                <span className="font-semibold text-neutral-900 block">Confidentiality Commitment</span>
+                <p>
+                  All architectural drawings, site coordinates, and private patron briefs shared with Siddhatva Design are held in strict professional confidence under standard non-disclosure practices.
+                </p>
               </div>
-            </motion.div>
+            </div>
           </div>
-        </section>
+        </div>
+      </main>
 
-        {/* ── Global Footer ──────────────────────────────────────────── */}
-        <GlobalFooter />
-
-      </div>
+      <GlobalFooter />
     </div>
   );
 }
