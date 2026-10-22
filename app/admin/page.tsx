@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSiteContent, SiteContentType } from "@/lib/useSiteContent";
@@ -28,6 +28,7 @@ import {
   Check,
   RefreshCw,
   FolderOpen,
+  UploadCloud,
 } from "lucide-react";
 
 interface InquiryItem {
@@ -72,6 +73,137 @@ const PRESET_VILLA_IMAGES = [
     url: "/images/project-2.jpg",
   },
 ];
+
+function DeviceImagePicker({
+  value,
+  onChange,
+  label = "Upload Image",
+}: {
+  value: string;
+  onChange: (url: string) => void;
+  label?: string;
+}) {
+  const [isUploading, setIsUploading] = useState(false);
+  const [dragActive, setDragActive] = useState(false);
+  const [showUrl, setShowUrl] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const handleUpload = async (file: File) => {
+    if (!file || !file.type.startsWith("image/")) return;
+    setIsUploading(true);
+    try {
+      const fd = new FormData();
+      fd.append("file", file);
+      const res = await fetch("/api/admin/upload", {
+        method: "POST",
+        body: fd,
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.url) {
+          onChange(data.url);
+        }
+      }
+    } catch (err) {
+      console.error("Device image upload failed", err);
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  return (
+    <div className="space-y-1.5 w-full">
+      <input
+        ref={inputRef}
+        type="file"
+        accept="image/*"
+        className="hidden"
+        onChange={(e) => {
+          if (e.target.files && e.target.files[0]) {
+            handleUpload(e.target.files[0]);
+          }
+        }}
+      />
+
+      <div
+        onDragOver={(e) => {
+          e.preventDefault();
+          setDragActive(true);
+        }}
+        onDragLeave={() => setDragActive(false)}
+        onDrop={(e) => {
+          e.preventDefault();
+          setDragActive(false);
+          if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+            handleUpload(e.dataTransfer.files[0]);
+          }
+        }}
+        className={`group border-2 border-dashed rounded-xl p-2.5 flex items-center justify-between gap-3 transition-all ${
+          dragActive
+            ? "border-amber-500 bg-amber-50/70"
+            : "border-black/[0.12] bg-neutral-50/80 hover:bg-neutral-100 hover:border-black/30"
+        }`}
+      >
+        <div className="flex items-center gap-3 min-w-0">
+          <div className="w-12 h-10 rounded-lg overflow-hidden bg-neutral-200 border border-black/[0.08] shrink-0 relative flex items-center justify-center">
+            {value ? (
+              <img src={value} alt="" className="w-full h-full object-cover" />
+            ) : (
+              <ImageIcon className="w-4 h-4 text-neutral-400" />
+            )}
+            {isUploading && (
+              <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
+                <RefreshCw className="w-3.5 h-3.5 text-white animate-spin" />
+              </div>
+            )}
+          </div>
+          <div className="min-w-0">
+            <span className="text-xs font-semibold text-neutral-800 block truncate">
+              {isUploading ? "Uploading file from device..." : label}
+            </span>
+            <span className="text-[10.5px] font-mono text-neutral-400 truncate block">
+              {value ? value : "No image selected"}
+            </span>
+          </div>
+        </div>
+
+        <button
+          type="button"
+          onClick={() => inputRef.current?.click()}
+          disabled={isUploading}
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-[#111111] text-white hover:bg-neutral-800 transition-all shrink-0 cursor-pointer shadow-xs active:scale-95"
+        >
+          {isUploading ? (
+            <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+          ) : (
+            <UploadCloud className="w-3.5 h-3.5 text-amber-300" />
+          )}
+          <span>{isUploading ? "Uploading..." : "Browse Device"}</span>
+        </button>
+      </div>
+
+      <div className="flex items-center justify-between px-1">
+        <button
+          type="button"
+          onClick={() => setShowUrl(!showUrl)}
+          className="text-[10.5px] text-neutral-500 hover:text-neutral-800 underline font-mono cursor-pointer"
+        >
+          {showUrl ? "Hide URL input" : "Or paste image URL"}
+        </button>
+      </div>
+
+      {showUrl && (
+        <input
+          type="text"
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          placeholder="https://... or /images/..."
+          className="w-full px-3 py-1.5 rounded-lg border border-black/[0.1] text-xs font-mono"
+        />
+      )}
+    </div>
+  );
+}
 
 export default function AdminPage() {
   const { content, saveContent } = useSiteContent();
@@ -526,19 +658,17 @@ export default function AdminPage() {
                 {/* Hero Image Section */}
                 <div className="space-y-3">
                   <label className="block text-xs font-mono uppercase tracking-wider text-neutral-700">
-                    Card Hero Image URL
+                    Card Hero Image (Browse from Device or Pick Preset)
                   </label>
-                  <input
-                    type="text"
+                  <DeviceImagePicker
                     value={formData.entranceCard.image}
-                    onChange={(e) =>
+                    onChange={(url) =>
                       setFormData({
                         ...formData,
-                        entranceCard: { ...formData.entranceCard, image: e.target.value },
+                        entranceCard: { ...formData.entranceCard, image: url },
                       })
                     }
-                    placeholder="https://images.unsplash.com/... or /images/..."
-                    className="w-full px-4 py-2.5 rounded-xl border border-black/[0.1] text-xs font-mono focus:outline-none focus:ring-2 focus:ring-neutral-900"
+                    label="Entrance Card Cover"
                   />
 
                   {/* Preset Villa Photo Pickers */}
@@ -887,20 +1017,16 @@ export default function AdminPage() {
                       </div>
                     </div>
 
-                    {/* Image URL input */}
-                    <div>
-                      <label className="block text-[11px] font-mono text-neutral-500 mb-1">
-                        Image URL or path
-                      </label>
-                      <input
-                        type="text"
+                    {/* Device Image Picker */}
+                    <div className="pt-1">
+                      <DeviceImagePicker
                         value={estate.image}
-                        onChange={(e) => {
+                        onChange={(url) => {
                           const updated = [...formData.featuredEstates];
-                          updated[idx].image = e.target.value;
+                          updated[idx].image = url;
                           setFormData({ ...formData, featuredEstates: updated });
                         }}
-                        className="w-full px-3 py-1.5 rounded-lg border border-black/[0.08] text-xs font-mono"
+                        label={`Estate #${estate.number} Photo`}
                       />
                     </div>
                   </div>
@@ -1008,17 +1134,17 @@ export default function AdminPage() {
                         />
                       </div>
 
-                      <input
-                        type="text"
-                        value={studio.src}
-                        onChange={(e) => {
-                          const updated = [...formData.studioImages];
-                          updated[idx].src = e.target.value;
-                          setFormData({ ...formData, studioImages: updated });
-                        }}
-                        placeholder="Image path"
-                        className="w-full px-2.5 py-1.5 rounded-lg border border-black/[0.08] text-[11px] font-mono text-neutral-500"
-                      />
+                      <div className="pt-1">
+                        <DeviceImagePicker
+                          value={studio.src}
+                          onChange={(url) => {
+                            const updated = [...formData.studioImages];
+                            updated[idx].src = url;
+                            setFormData({ ...formData, studioImages: updated });
+                          }}
+                          label="Studio Space Photo"
+                        />
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -1097,7 +1223,10 @@ export default function AdminPage() {
                         className="w-full px-2.5 py-1.5 rounded-lg border border-black/[0.08] text-xs font-semibold"
                       />
 
-                      <div className="grid grid-cols-2 gap-2">
+                      <div>
+                        <label className="block text-[11px] font-mono text-neutral-500 mb-1">
+                          Category
+                        </label>
                         <select
                           value={item.category}
                           onChange={(e) => {
@@ -1105,7 +1234,7 @@ export default function AdminPage() {
                             (updated[idx] as any).category = e.target.value;
                             setFormData({ ...formData, galleryItems: updated });
                           }}
-                          className="w-full px-2 py-1.5 rounded-lg border border-black/[0.08] text-[11px] font-mono bg-white"
+                          className="w-full px-2.5 py-1.5 rounded-lg border border-black/[0.08] text-[11px] font-mono bg-white"
                         >
                           <option value="Living Spaces">Living Spaces</option>
                           <option value="Bedrooms">Bedrooms</option>
@@ -1114,17 +1243,17 @@ export default function AdminPage() {
                           <option value="Exterior Architecture">Exterior Architecture</option>
                           <option value="3D Visualizations">3D Visualizations</option>
                         </select>
+                      </div>
 
-                        <input
-                          type="text"
+                      <div className="pt-1">
+                        <DeviceImagePicker
                           value={item.src}
-                          onChange={(e) => {
+                          onChange={(url) => {
                             const updated = [...formData.galleryItems];
-                            updated[idx].src = e.target.value;
+                            updated[idx].src = url;
                             setFormData({ ...formData, galleryItems: updated });
                           }}
-                          placeholder="Image path"
-                          className="w-full px-2 py-1.5 rounded-lg border border-black/[0.08] text-[11px] font-mono text-neutral-500"
+                          label="Gallery Image Photo"
                         />
                       </div>
 
