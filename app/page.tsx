@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
 import ShowcaseHeader from "@/components/ui/ShowcaseHeader";
 import HeroStatement from "@/components/ui/HeroStatement";
@@ -15,10 +16,35 @@ import FAQSection from "@/components/sections/FAQSection";
 import StartProjectSection from "@/components/sections/StartProjectSection";
 import GlobalFooter from "@/components/ui/GlobalFooter";
 import VillaDetailsModal from "@/components/ui/VillaDetailsModal";
+import ArchitectEntranceCard from "@/components/ui/ArchitectEntranceCard";
+import { Sparkles } from "lucide-react";
 
 export default function Home() {
+  const [showEntrance, setShowEntrance] = useState(true);
+
   return (
     <div className="relative w-full min-h-screen bg-[#f5f4f2] text-[#111111] selection:bg-[#111111] selection:text-[#f5f4f2]">
+      {/* ── 00 — INTERACTIVE 3D ENTRANCE CARD (Shows before entering main site) ── */}
+      <ArchitectEntranceCard
+        isOpen={showEntrance}
+        onEnter={() => setShowEntrance(false)}
+      />
+
+      {/* Floating trigger to re-open the 3D Tilt Card anytime */}
+      {!showEntrance && (
+        <motion.button
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.3 }}
+          onClick={() => setShowEntrance(true)}
+          className="fixed bottom-6 right-6 z-[150] flex items-center gap-2 rounded-full border border-black/10 bg-[#111111]/90 px-4 py-2.5 text-xs font-mono text-white shadow-2xl backdrop-blur-md transition-all duration-200 hover:scale-105 hover:bg-black active:scale-95"
+          title="Reopen 3D Architectural Card"
+        >
+          <Sparkles className="h-3.5 w-3.5 text-amber-300" />
+          <span>3D Entrance Card</span>
+        </motion.button>
+      )}
+
       {/* ── Fixed Top Header Navigation ── */}
       <ShowcaseHeader />
 
