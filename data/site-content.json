@@ -1,0 +1,153 @@
+{
+  "entranceCard": {
+    "badge": "3D Digital Twin",
+    "year": "Est. 2026",
+    "image": "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=1000&auto=format&fit=crop",
+    "estateName": "The Glass Monolith Estate",
+    "title": "The Architectural Dossier",
+    "description": "Step into an interactive showcase of monumental residences, sculpted private estates, and real-time digital scale models.",
+    "location": "Mumbai & Ahmedabad",
+    "category": "Curated Estates",
+    "buttonText": "Click to Enter Studio"
+  },
+  "featuredEstates": [
+    {
+      "id": "estate-1",
+      "villaId": "villa-1",
+      "number": "01",
+      "name": "The Obsidian Pavilion",
+      "location": "Alibaug Coast, MH",
+      "category": "Residential Architecture",
+      "image": "/images/project-1.jpg"
+    },
+    {
+      "id": "estate-2",
+      "villaId": "villa-2",
+      "number": "02",
+      "name": "Casa Solaria Cliffside",
+      "location": "Udaipur Hills, RJ",
+      "category": "Residential Architecture",
+      "image": "/images/project-2.jpg"
+    },
+    {
+      "id": "estate-3",
+      "villaId": "villa-3",
+      "number": "03",
+      "name": "Kyoto Zen Courtyard",
+      "location": "Lonavala Valley, MH",
+      "category": "Residential Architecture",
+      "image": "/images/project-3.jpg"
+    },
+    {
+      "id": "estate-4",
+      "villaId": "villa-4",
+      "number": "04",
+      "name": "Brutalist Stone Haven",
+      "location": "Goa Estate, GA",
+      "category": "Residential Architecture",
+      "image": "/images/project-4.jpg"
+    }
+  ],
+  "studioImages": [
+    {
+      "id": "studio-1",
+      "src": "/images/studio/project-interior-1.jpeg",
+      "title": "Fluted Oak Living Lounge",
+      "room": "Living Lounge",
+      "subtitle": "Concealed 2700K indirect coves & vertical white oak"
+    },
+    {
+      "id": "studio-2",
+      "src": "/images/studio/project-interior-2.jpeg",
+      "title": "Contemporary Master Suite",
+      "room": "Master Suite",
+      "subtitle": "Textured wall architecture & custom headboard"
+    },
+    {
+      "id": "studio-3",
+      "src": "/images/studio/project-interior-4.jpeg",
+      "title": "Private Dining Pavilion",
+      "room": "Dining Room",
+      "subtitle": "Natural Italian marble & linear brass luminaires"
+    },
+    {
+      "id": "studio-4",
+      "src": "/images/studio/project-interior-5.jpeg",
+      "title": "Minimalist Kitchen & Bronze",
+      "room": "Kitchen",
+      "subtitle": "Flush handleless cabinetry & brushed bronze accents"
+    },
+    {
+      "id": "studio-5",
+      "src": "/images/studio/project-interior-6.jpeg",
+      "title": "Executive Architectural Study",
+      "room": "Study / Library",
+      "subtitle": "Acoustic lounge & integrated library shelving"
+    },
+    {
+      "id": "studio-6",
+      "src": "/images/studio/project-interior-7.jpeg",
+      "title": "Monolithic Stone Ensuite",
+      "room": "Ensuite Bathroom",
+      "subtitle": "Bookmatched slabs & custom matte black fixtures"
+    },
+    {
+      "id": "studio-7",
+      "src": "/images/studio/project-interior-8.jpeg",
+      "title": "Guest Pavilion Sanctuary",
+      "room": "Guest Suite",
+      "subtitle": "Recessed ceiling lighting & minimalist palette"
+    },
+    {
+      "id": "studio-8",
+      "src": "/images/studio/project-interior-10.jpeg",
+      "title": "Open Plan Living Landscape",
+      "room": "Great Room",
+      "subtitle": "Floor-to-ceiling glazing & double-height volume"
+    }
+  ],
+  "galleryItems": [
+    {
+      "id": "gal-1",
+      "src": "/images/studio/project-interior-1.jpeg",
+      "title": "Minimalist Lounge with Fluted Oak & Indirect Coves",
+      "category": "Living Spaces",
+      "description": "Concealed 2700K LED coves wash warm light across vertical white oak paneling."
+    },
+    {
+      "id": "gal-2",
+      "src": "/images/project-1.jpg",
+      "title": "Cast Concrete Facade & Shaded Entrance Loggia",
+      "category": "Exterior Architecture",
+      "description": "Deep overhangs and board-formed architectural concrete shielding against intense solar exposure."
+    },
+    {
+      "id": "gal-3",
+      "src": "/images/studio/project-interior-2.jpeg",
+      "title": "Master Bedroom Suite with Textured Wall Architecture",
+      "category": "Bedrooms",
+      "description": "Bespoke upholstered floating headboard paired with integrated nightstands."
+    },
+    {
+      "id": "gal-4",
+      "src": "/images/studio/project-interior-4.jpeg",
+      "title": "Private Dining Pavilion & Sculptural Lighting",
+      "category": "Kitchens & Dining",
+      "description": "Natural Italian marble dining table anchored beneath custom linear brass architectural fixtures."
+    },
+    {
+      "id": "gal-5",
+      "src": "/images/project-4.jpg",
+      "title": "Parametric Fluid Villa — Real-Time 3D Digital Twin",
+      "category": "3D Visualizations",
+      "description": "Sub-millimeter BIM model rendering with accurate diurnal light refraction."
+    },
+    {
+      "id": "gal-6",
+      "src": "/images/studio/project-interior-5.jpeg",
+      "title": "Sleek Modular Kitchen with Bronze Metal Accents",
+      "category": "Kitchens & Dining",
+      "description": "Flush integrated handleless cabinetry with brushed bronze metal detailing."
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+[
+  {
+    "id": "SD-LX902-MK4",
+    "name": "Vikramaditya Singhania",
+    "email": "v.singhania@heritage-holdings.in",
+    "phone": "+91 98200 44521",
+    "projectType": "Residential Architecture",
+    "location": "Alibaug Coastline, Maharashtra",
+    "approxArea": "14,500 sq.ft",
+    "budgetRange": "₹7 Crore+",
+    "timeline": "Within 3–6 months",
+    "brief": "We are acquiring an oceanfront cliffside parcel in Alibaug. Seeking a monolithic raw concrete and teak private estate with subterranean wellness pavilion and infinity cantilever pool.",
+    "status": "In Review",
+    "createdAt": "2026-10-21T14:30:00.000Z",
+    "notes": "Spoke to executive assistant. Site topology survey ready for review next Monday."
+  },
+  {
+    "id": "SD-LX841-BR2",
+    "name": "Dr. Ananya Mehta",
+    "email": "ananya.mehta@luminahealth.com",
+    "phone": "+91 97112 88340",
+    "projectType": "Interior Design",
+    "location": "Worli Sea Face, Mumbai",
+    "approxArea": "6,200 sq.ft Duplex",
+    "budgetRange": "₹3 Crore – ₹7 Crore",
+    "timeline": "Immediate (Next 1–2 months)",
+    "brief": "Complete bespoke interior architecture for bare-shell high-rise penthouse. Needs Japanese minimalism merged with Italian stonecraft, fluted oak joinery, and concealed ambient lighting.",
+    "status": "New",
+    "createdAt": "2026-10-22T08:15:00.000Z",
+    "notes": ""
+  },
+  {
+    "id": "SD-LX773-TR9",
+    "name": "Rajesh & Priya Bansal",
+    "email": "rbansal@bansalinfra.com",
+    "phone": "+91 99887 12345",
+    "projectType": "3D Visualization",
+    "location": "Thaltej, Ahmedabad",
+    "approxArea": "9,800 sq.ft",
+    "budgetRange": "₹1.5 Crore – ₹3 Crore",
+    "timeline": "Within 6–12 months",
+    "brief": "Require ultra high-fidelity 3D digital twin scale modeling and daylight simulation before commencing construction on a 3-storey contemporary courtyard residence.",
+    "status": "Contacted",
+    "createdAt": "2026-10-20T11:45:00.000Z",
+    "notes": "Sent architectural visualization dossier and 3D scale showcase demo link."
+  }
+]

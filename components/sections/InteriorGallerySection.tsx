@@ -3,6 +3,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import IntroAnimation, { MAX_SCROLL } from "@/components/ui/scroll-morph-hero";
+import { useSiteContent } from "@/lib/useSiteContent";
 
 interface GalleryImage {
   id: string;
@@ -127,13 +128,18 @@ export default function InteriorGallerySection() {
     "3D Visualizations",
   ];
 
+  const { content } = useSiteContent();
+  const allGalleryItems = (content?.galleryItems && content.galleryItems.length > 0)
+    ? (content.galleryItems as GalleryImage[])
+    : GALLERY_ITEMS;
+
   const filteredItems = selectedCategory === "All"
-    ? GALLERY_ITEMS
-    : GALLERY_ITEMS.filter((item) => item.category === selectedCategory);
+    ? allGalleryItems
+    : allGalleryItems.filter((item) => item.category === selectedCategory);
 
   // 20 high-res images for the dense 3D scroll-morph arc
   const galleryMorphItemsData = GALLERY_MORPH_IMAGES.map((src, i) => {
-    const item = GALLERY_ITEMS[i % GALLERY_ITEMS.length];
+    const item = allGalleryItems[i % allGalleryItems.length];
     return {
       src,
       title: item ? item.title : `Spatial Study ${i + 1}`,

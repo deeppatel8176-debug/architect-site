@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { TiltCard } from "@/components/ui/tilt-card";
 import { ArrowRight, Sparkles, Building2, Compass, Layers } from "lucide-react";
+import { useSiteContent } from "@/lib/useSiteContent";
 
 interface ArchitectEntranceCardProps {
   onEnter?: () => void;
@@ -15,6 +16,8 @@ export function ArchitectEntranceCard({
   isOpen = true,
 }: ArchitectEntranceCardProps) {
   const [visible, setVisible] = useState(isOpen);
+  const { content } = useSiteContent();
+  const entrance = content?.entranceCard;
 
   const handleEnter = () => {
     setVisible(false);
@@ -90,18 +93,18 @@ export function ArchitectEntranceCard({
                 <div className="mb-5 flex items-center justify-between">
                   <span className="inline-flex items-center gap-1.5 rounded-full border border-black/[0.08] bg-[#111111]/[0.04] px-3 py-1 text-[11px] font-mono font-medium uppercase tracking-wider text-neutral-800 backdrop-blur-md">
                     <Sparkles className="h-3 w-3 text-amber-700" />
-                    3D Digital Twin
+                    {entrance?.badge || "3D Digital Twin"}
                   </span>
                   <span className="text-[12px] font-mono tracking-wider text-neutral-500">
-                    Est. 2026
+                    {entrance?.year || "Est. 2026"}
                   </span>
                 </div>
 
                 {/* Hero Architecture Visual Preview */}
                 <div className="relative mb-6 h-48 w-full overflow-hidden rounded-2xl border border-black/[0.08] bg-neutral-100 shadow-sm">
                   <img
-                    src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1000&auto=format&fit=crop"
-                    alt="Luxury Villa Architecture Preview"
+                    src={entrance?.image || "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1000&auto=format&fit=crop"}
+                    alt={entrance?.estateName || "Luxury Villa Architecture Preview"}
                     className="h-full w-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent" />
@@ -109,35 +112,35 @@ export function ArchitectEntranceCard({
                   {/* Floating Tag inside photo */}
                   <div className="absolute bottom-3 left-3 flex items-center gap-2 rounded-lg border border-black/10 bg-white/90 px-2.5 py-1 text-[11px] font-mono text-neutral-900 shadow-xs backdrop-blur-md">
                     <Building2 className="h-3.5 w-3.5 text-neutral-800" />
-                    <span>The Glass Monolith Estate</span>
+                    <span>{entrance?.estateName || "The Glass Monolith Estate"}</span>
                   </div>
                 </div>
 
                 {/* Card Title & Architectural Creed */}
                 <h2 className="text-2xl sm:text-[28px] font-semibold tracking-tight text-[#111111] transition-colors">
-                  The Architectural Dossier
+                  {entrance?.title || "The Architectural Dossier"}
                 </h2>
                 
                 <p className="mt-2.5 text-[13.5px] leading-relaxed text-neutral-600">
-                  Step into an interactive showcase of monumental residences, sculpted private estates, and real-time digital scale models.
+                  {entrance?.description || "Step into an interactive showcase of monumental residences, sculpted private estates, and real-time digital scale models."}
                 </p>
 
                 {/* Micro Specs Grid */}
                 <div className="my-5 grid grid-cols-2 gap-2.5 border-y border-black/[0.08] py-3.5 text-[12px] font-mono text-neutral-700">
                   <div className="flex items-center gap-2">
                     <Compass className="h-3.5 w-3.5 text-neutral-900" />
-                    <span>Mumbai &amp; Ahmedabad</span>
+                    <span>{entrance?.location || "Mumbai & Ahmedabad"}</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <Layers className="h-3.5 w-3.5 text-neutral-900" />
-                    <span>Curated Estates</span>
+                    <span>{entrance?.category || "Curated Estates"}</span>
                   </div>
                 </div>
 
                 {/* Interactive Action Prompt Button */}
                 <div className="mt-1 flex items-center justify-between rounded-2xl bg-[#111111] px-5 py-3.5 text-white transition-all duration-200 group-hover:bg-neutral-800 shadow-sm">
                   <span className="text-[13px] font-medium tracking-wide">
-                    Click to Enter Studio
+                    {entrance?.buttonText || "Click to Enter Studio"}
                   </span>
                   <div className="flex h-7 w-7 items-center justify-center rounded-full bg-white/20 text-white transition-transform duration-300 group-hover:translate-x-1">
                     <ArrowRight className="h-4 w-4" />

@@ -87,8 +87,39 @@ export async function POST(req: Request) {
     // 4. Generate unique inquiry ID
     const inquiryId = `SD-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).substring(2, 6).toUpperCase()}`;
 
-    // 5. In production, connect to studio email dispatcher or database
-    // (Checked against process.env.STUDIO_INQUIRY_EMAIL if configured)
+    // 5. Save inquiry to persistent storage
+    try {
+      const fs = await import("fs");
+      const path = await import("path");
+      const filePath = path.join(process.cwd(), "data", "inquiries.json");
+      let inquiries: any[] = [];
+      if (fs.existsSync(filePath)) {
+        try {
+          inquiries = JSON.parse(fs.readFileSync(filePath, "utf-8"));
+        } catch (e) {
+          inquiries = [];
+        }
+      }
+      inquiries.unshift({
+        id: inquiryId,
+        name,
+        email,
+        phone: body.phone || "",
+        projectType,
+        location,
+        approxArea: body.approxArea || "",
+        budgetRange: body.budgetRange || "",
+        timeline: body.timeline || "",
+        brief,
+        status: "New",
+        createdAt: new Date().toISOString(),
+        notes: "",
+      });
+      fs.writeFileSync(filePath, JSON.stringify(inquiries, null, 2), "utf-8");
+    } catch (saveErr) {
+      console.error("[Inquiry Save Error]", saveErr);
+    }
+
     console.log(`[Siddhatva Inquiry Received] ID: ${inquiryId}`, {
       name,
       email,

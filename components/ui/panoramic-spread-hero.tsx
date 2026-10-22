@@ -9,10 +9,11 @@ import {
   useSpring,
   useMotionValueEvent,
 } from "motion/react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useMemo } from "react";
+import { useSiteContent } from "@/lib/useSiteContent";
 
-// Authentic Studio Photography & Architectural Visualizations
-const IMAGES = [
+// Default Studio Photography & Architectural Visualizations
+const DEFAULT_IMAGES = [
   { src: "/images/studio/project-interior-1.jpeg", alt: "Siddhatva Design - Fluted Oak Living Lounge & Indirect Coves" },
   { src: "/images/studio/project-interior-2.jpeg", alt: "Siddhatva Design - Contemporary Master Suite & Custom Headboard" },
   { src: "/images/studio/project-interior-4.jpeg", alt: "Siddhatva Design - Dining Pavilion & Architectural Lighting" },
@@ -24,17 +25,17 @@ const IMAGES = [
 ];
 
 // Calculate a sweeping 3D arch around the center point for both mobile and desktop
-const generatePanoramicCards = () => {
-  const total = IMAGES.length;
+const generatePanoramicCards = (items: { src: string; alt?: string; title?: string }[]) => {
+  const total = items.length;
   const centerIndex = (total - 1) / 2;
 
-  return IMAGES.map((item, i) => {
+  return items.map((item, i) => {
     const offset = i - centerIndex;
     const absOffset = Math.abs(offset);
     const zIndex = Math.round(10 - absOffset);
 
     return {
-      item,
+      item: { src: item.src, alt: item.alt || item.title || "Siddhatva Design Portfolio" },
       z: zIndex,
       desktop: {
         // Increased stack offset slightly to accommodate larger cards
@@ -54,8 +55,6 @@ const generatePanoramicCards = () => {
     };
   });
 };
-
-const CARDS = generatePanoramicCards();
 
 // Optimized physics to remove scroll jitter (higher damping, zero bounce)
 const PROGRESS_SPRING = { stiffness: 80, damping: 25, mass: 0.5, restDelta: 0.001 };
@@ -173,6 +172,14 @@ export default function PanoramicSpreadHero() {
   const wrapRef = useRef<HTMLDivElement>(null);
   const reduce = useReducedMotion();
   const [isMobile, setIsMobile] = useState(false);
+  const { content } = useSiteContent();
+
+  const cards = useMemo(() => {
+    const studioItems = (content?.studioImages && content.studioImages.length > 0)
+      ? content.studioImages.map((s) => ({ src: s.src, alt: s.title }))
+      : DEFAULT_IMAGES;
+    return generatePanoramicCards(studioItems);
+  }, [content?.studioImages]);
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 768);
@@ -220,7 +227,7 @@ export default function PanoramicSpreadHero() {
           className="absolute inset-0 z-10 flex items-center justify-center"
           style={{ rotateX: tiltX, rotateY: tiltY, transformStyle: "preserve-3d" }}
         >
-          {CARDS.map((card, i) => (
+          {cards.map((card, i) => (
             <GalleryCard
               key={i}
               card={card}

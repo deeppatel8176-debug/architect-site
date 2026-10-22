@@ -8,6 +8,7 @@ import { useStore } from "@/store/useStore";
 import { VILLAS } from "@/data/villas";
 import { STUDIO_PROJECTS, StudioProject } from "@/data/projects-data";
 import { motion } from "framer-motion";
+import { useSiteContent } from "@/lib/useSiteContent";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 35 },
@@ -22,21 +23,36 @@ const fadeUp = {
   }),
 };
 
-// Carousel items derived from 3D villas
-const villaCarouselItems: CoverflowCarouselItem[] = VILLAS.map((villa, idx) => ({
-  id: villa.id,
-  image: `/images/project-${(idx % 4) + 1}.jpg`,
-  alt: `Estate ${villa.number}: ${villa.name} - ${villa.location}`,
-  content: (
-    <div className="flex flex-col items-center text-center">
-      <span className="text-xs font-mono text-neutral-400">Estate {villa.number}</span>
-      <span className="font-semibold text-neutral-900">{villa.name}</span>
-      <span className="text-[11px] text-neutral-500 font-mono mt-0.5">{villa.location}</span>
-    </div>
-  ),
-}));
-
 export default function VillaCoverflowSection() {
+  const { content } = useSiteContent();
+  const featuredEstates = content?.featuredEstates || [];
+
+  const villaCarouselItems: CoverflowCarouselItem[] = featuredEstates.length > 0
+    ? featuredEstates.map((estate, idx) => ({
+        id: estate.villaId || `estate-${idx}`,
+        image: estate.image,
+        alt: `Estate ${estate.number}: ${estate.name} - ${estate.location}`,
+        content: (
+          <div className="flex flex-col items-center text-center">
+            <span className="text-xs font-mono text-neutral-400">Estate {estate.number}</span>
+            <span className="font-semibold text-neutral-900">{estate.name}</span>
+            <span className="text-[11px] text-neutral-500 font-mono mt-0.5">{estate.location}</span>
+          </div>
+        ),
+      }))
+    : VILLAS.map((villa, idx) => ({
+        id: villa.id,
+        image: `/images/project-${(idx % 4) + 1}.jpg`,
+        alt: `Estate ${villa.number}: ${villa.name} - ${villa.location}`,
+        content: (
+          <div className="flex flex-col items-center text-center">
+            <span className="text-xs font-mono text-neutral-400">Estate ${villa.number}</span>
+            <span className="font-semibold text-neutral-900">{villa.name}</span>
+            <span className="text-[11px] text-neutral-500 font-mono mt-0.5">{villa.location}</span>
+          </div>
+        ),
+      }));
+
   const currentModelIndex = useStore((s) => s.currentModelIndex);
   const setModelIndex = useStore((s) => s.setModelIndex);
   const setDetailsModalOpen = useStore((s) => s.setDetailsModalOpen);
