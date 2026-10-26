@@ -3,7 +3,16 @@
 import { useState, useEffect } from "react";
 import defaultContent from "@/data/site-content.json";
 
-export type SiteContentType = typeof defaultContent;
+export interface WheelImageItem {
+  id: string;
+  src: string;
+  title: string;
+  category: string;
+}
+
+export type SiteContentType = typeof defaultContent & {
+  wheelImages?: WheelImageItem[];
+};
 
 const STORAGE_KEY = "siddhatva_site_content_v1";
 const UPDATE_EVENT = "siddhatva_content_updated";
@@ -13,7 +22,13 @@ export function useSiteContent() {
     if (typeof window !== "undefined") {
       try {
         const cached = localStorage.getItem(STORAGE_KEY);
-        if (cached) return JSON.parse(cached);
+        if (cached) {
+          const parsed = JSON.parse(cached);
+          if (!parsed.wheelImages || parsed.wheelImages.length === 0) {
+            parsed.wheelImages = defaultContent.wheelImages;
+          }
+          return parsed;
+        }
       } catch (e) {
         // Fallback
       }
@@ -29,6 +44,9 @@ export function useSiteContent() {
       .then((res) => (res.ok ? res.json() : null))
       .then((data) => {
         if (data && isMounted) {
+          if (!data.wheelImages || data.wheelImages.length === 0) {
+            data.wheelImages = defaultContent.wheelImages;
+          }
           setContent(data);
           try {
             localStorage.setItem(STORAGE_KEY, JSON.stringify(data));

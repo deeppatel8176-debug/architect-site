@@ -2,11 +2,11 @@
   "entranceCard": {
     "badge": "3D Digital Twin",
     "year": "Est. 2026",
-    "image": "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=1000&auto=format&fit=crop",
+    "image": "/uploads/1792733096582-dac6c0853f689cac268f6ada965e038a.jpg",
     "estateName": "The Glass Monolith Estate",
     "title": "The Architectural Dossier",
     "description": "Step into an interactive showcase of monumental residences, sculpted private estates, and real-time digital scale models.",
-    "location": "Mumbai & Ahmedabad",
+    "location": "Surat",
     "category": "Curated Estates",
     "buttonText": "Click to Enter Studio"
   },
@@ -18,7 +18,7 @@
       "name": "The Obsidian Pavilion",
       "location": "Alibaug Coast, MH",
       "category": "Residential Architecture",
-      "image": "/images/project-1.jpg"
+      "image": "/uploads/1792733147707-4b4aa063d26ddab99795940fcb9a5271.jpg"
     },
     {
       "id": "estate-2",
@@ -27,7 +27,7 @@
       "name": "Casa Solaria Cliffside",
       "location": "Udaipur Hills, RJ",
       "category": "Residential Architecture",
-      "image": "/images/project-2.jpg"
+      "image": "/uploads/1792733151686-71be84093deeee51110335c5ca84931c.jpg"
     },
     {
       "id": "estate-3",
@@ -36,16 +36,16 @@
       "name": "Kyoto Zen Courtyard",
       "location": "Lonavala Valley, MH",
       "category": "Residential Architecture",
-      "image": "/images/project-3.jpg"
+      "image": "/uploads/1792733156593-bf167c61479a8ab202a530ef21e77250.jpg"
     },
     {
       "id": "estate-4",
       "villaId": "villa-4",
       "number": "04",
-      "name": "Brutalist Stone Haven",
+      "name": "Woodie Haven",
       "location": "Goa Estate, GA",
       "category": "Residential Architecture",
-      "image": "/images/project-4.jpg"
+      "image": "/uploads/1792733161087-cfc4499ca03d5e039c67be2556b05401.jpg"
     }
   ],
   "studioImages": [
@@ -116,7 +116,7 @@
     },
     {
       "id": "gal-2",
-      "src": "/images/project-1.jpg",
+      "src": "/uploads/1792733251728-fdedde85981ad9e0e6b4db182be855e3.jpg",
       "title": "Cast Concrete Facade & Shaded Entrance Loggia",
       "category": "Exterior Architecture",
       "description": "Deep overhangs and board-formed architectural concrete shielding against intense solar exposure."
@@ -137,7 +137,7 @@
     },
     {
       "id": "gal-5",
-      "src": "/images/project-4.jpg",
+      "src": "/uploads/1792733261185-dac6c0853f689cac268f6ada965e038a.jpg",
       "title": "Parametric Fluid Villa — Real-Time 3D Digital Twin",
       "category": "3D Visualizations",
       "description": "Sub-millimeter BIM model rendering with accurate diurnal light refraction."
@@ -148,6 +148,110 @@
       "title": "Sleek Modular Kitchen with Bronze Metal Accents",
       "category": "Kitchens & Dining",
       "description": "Flush integrated handleless cabinetry with brushed bronze metal detailing."
+    }
+  ],
+  "wheelImages": [
+    {
+      "id": "wheel-1",
+      "src": "/images/studio/project-interior-1.jpeg",
+      "title": "Minimalist Lounge with Fluted Oak & Indirect Coves",
+      "category": "Living Spaces"
+    },
+    {
+      "id": "wheel-2",
+      "src": "/uploads/1792734114393-4b4aa063d26ddab99795940fcb9a5271.jpg",
+      "title": "Cast Concrete Facade & Shaded Entrance Loggia",
+      "category": "Exterior Architecture"
+    },
+    {
+      "id": "wheel-3",
+      "src": "/images/studio/project-interior-2.jpeg",
+      "title": "Master Bedroom Suite with Textured Wall Architecture",
+      "category": "Bedrooms"
+    },
+    {
+      "id": "wheel-4",
+      "src": "/images/studio/project-interior-4.jpeg",
+      "title": "Private Dining Pavilion & Sculptural Lighting",
+      "category": "Kitchens & Dining"
+    },
+    {
+      "id": "wheel-5",
+      "src": "/uploads/1792733261185-dac6c0853f689cac268f6ada965e038a.jpg",
+      "title": "Parametric Fluid Villa — Real-Time 3D Digital Twin",
+      "category": "3D Visualizations"
+    },
+    {
+      "id": "wheel-6",
+      "src": "/images/studio/project-interior-5.jpeg",
+      "title": "Sleek Modular Kitchen with Bronze Metal Accents",
+      "category": "Kitchens & Dining"
+    },
+    {
+      "id": "wheel-7",
+      "src": "/uploads/1792734126130-71be84093deeee51110335c5ca84931c.jpg",
+      "title": "Cantilevered Upper Terrace & Horizon Framing",
+      "category": "Exterior Architecture"
+    },
+    {
+      "id": "wheel-8",
+      "src": "/images/studio/project-interior-7.jpeg",
+      "title": "Monolithic Stone & Terrazzo Ensuite Sanctuary",
+      "category": "Bathrooms"
+    },
+    {
+      "id": "wheel-9",
+      "src": "/images/studio/project-interior-10.jpeg",
+      "title": "Double-Height Open Living & Landscaped Courtyard",
+      "category": "Living Spaces"
+    },
+    {
+      "id": "wheel-10",
+      "src": "/images/studio/project-interior-8.jpeg",
+      "title": "Private Guest Suite with Architectural Recesses",
+      "category": "Bedrooms"
+    },
+    {
+      "id": "wheel-11",
+      "src": "/images/studio/project-interior-3.jpeg",
+      "title": "Contemporary Stone Fireplace & Intimate Alcove",
+      "category": "Living Spaces"
+    },
+    {
+      "id": "wheel-12",
+      "src": "/images/studio/project-interior-6.jpeg",
+      "title": "Executive Architectural Study & Walnut Millwork",
+      "category": "Living Spaces"
+    },
+    {
+      "id": "wheel-13",
+      "src": "/images/studio/project-interior-9.jpeg",
+      "title": "Minimalist Staircase & Vertical Light Shaft",
+      "category": "Living Spaces"
+    },
+    {
+      "id": "wheel-14",
+      "src": "/uploads/1792734137353-cfc4499ca03d5e039c67be2556b05401.jpg",
+      "title": "Courtyard Reflection Pool & Monolithic Basalt",
+      "category": "Exterior Architecture"
+    },
+    {
+      "id": "wheel-15",
+      "src": "/uploads/1792734143292-fdedde85981ad9e0e6b4db182be855e3.jpg",
+      "title": "Raw Concrete & Teak Louver Pavilion",
+      "category": "Exterior Architecture"
+    },
+    {
+      "id": "wheel-16",
+      "src": "/uploads/1792734231727-backgardern.png",
+      "title": "Sunken Firepit & Evening Ambient Horizon",
+      "category": "Living Spaces"
+    },
+    {
+      "id": "wheel-17",
+      "src": "/uploads/1792734236430-living_room.png",
+      "title": "Brutalist Skylit Gallery Corridor",
+      "category": "3D Visualizations"
     }
   ]
 }

@@ -3,7 +3,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { useSiteContent, SiteContentType } from "@/lib/useSiteContent";
+import { useSiteContent, SiteContentType, WheelImageItem } from "@/lib/useSiteContent";
+import defaultContent from "@/data/site-content.json";
 import { TiltCard } from "@/components/ui/tilt-card";
 import {
   LayoutDashboard,
@@ -208,7 +209,7 @@ function DeviceImagePicker({
 export default function AdminPage() {
   const { content, saveContent } = useSiteContent();
   const [activeTab, setActiveTab] = useState<
-    "dashboard" | "entrance-card" | "estates" | "studio-images" | "gallery" | "inquiries"
+    "dashboard" | "entrance-card" | "estates" | "studio-images" | "gallery" | "wheel-images" | "inquiries"
   >("dashboard");
 
   // Local form states
@@ -223,10 +224,27 @@ export default function AdminPage() {
   const [inquiryStatusFilter, setInquiryStatusFilter] = useState("All");
   const [selectedInquiry, setSelectedInquiry] = useState<InquiryItem | null>(null);
 
-  // Sync content into formData on load
+  // Sync content into formData on load, ensuring 17 wheelImages are populated
   useEffect(() => {
     if (content) {
-      setFormData(content);
+      const merged = { ...content };
+      if (!merged.wheelImages || merged.wheelImages.length < 17) {
+        const source = (merged.galleryItems && merged.galleryItems.length > 0)
+          ? merged.galleryItems
+          : defaultContent.galleryItems;
+        merged.wheelImages = Array.from({ length: 17 }).map((_, idx) => {
+          const existing = merged.wheelImages?.[idx];
+          if (existing) return existing;
+          const gal = source[idx % source.length];
+          return {
+            id: `wheel-${idx + 1}`,
+            src: gal?.src || defaultContent.wheelImages[idx % defaultContent.wheelImages.length].src,
+            title: gal?.title || defaultContent.wheelImages[idx % defaultContent.wheelImages.length].title,
+            category: gal?.category || defaultContent.wheelImages[idx % defaultContent.wheelImages.length].category,
+          };
+        });
+      }
+      setFormData(merged);
     }
   }, [content]);
 
@@ -367,6 +385,7 @@ export default function AdminPage() {
               { id: "estates", label: "Featured Estates", icon: Layers },
               { id: "studio-images", label: "Curated Space", icon: FolderOpen },
               { id: "gallery", label: "Gallery Archive", icon: ImageIcon },
+              { id: "wheel-images", label: "3D Wheel (17 Photos)", icon: Compass },
               { id: "inquiries", label: "Inquiry Box (Leads)", icon: Inbox, badge: inquiries.filter((i) => i.status === "New").length },
             ].map((tab) => {
               const Icon = tab.icon;
@@ -429,6 +448,8 @@ export default function AdminPage() {
                 ? "Curated Space (Panoramic Studio) Images"
                 : activeTab === "gallery"
                 ? "Interior & Visual Gallery Management"
+                : activeTab === "wheel-images"
+                ? "Interactive 3D Wheel (17 Selected Photos)"
                 : activeTab === "inquiries"
                 ? "Client Inquiries & Project Briefs"
                 : "Studio Executive Overview"}
@@ -513,6 +534,19 @@ export default function AdminPage() {
                   </div>
                   <div className="mt-1 text-xs text-neutral-500">
                     High-res spatial studies
+                  </div>
+                </div>
+
+                <div className="bg-white p-6 rounded-2xl border border-black/[0.08] shadow-xs">
+                  <div className="flex items-center justify-between text-neutral-500 mb-3">
+                    <span className="text-xs font-mono uppercase tracking-wider">3D Wheel Showcase</span>
+                    <Compass className="w-4 h-4 text-neutral-700" />
+                  </div>
+                  <div className="text-3xl font-semibold text-[#111111]">
+                    17 / 17
+                  </div>
+                  <div className="mt-1 text-xs text-neutral-500">
+                    Curated rotating studies
                   </div>
                 </div>
               </div>
@@ -621,6 +655,19 @@ export default function AdminPage() {
                           <FolderOpen className="w-4 h-4 text-neutral-700" />
                           <span className="text-xs font-medium text-neutral-800">
                             Manage Curated Space
+                          </span>
+                        </div>
+                        <ArrowRight className="w-3.5 h-3.5 text-neutral-400" />
+                      </button>
+
+                      <button
+                        onClick={() => setActiveTab("wheel-images")}
+                        className="flex items-center justify-between p-3 rounded-xl border border-black/[0.06] hover:bg-neutral-50 text-left transition-colors"
+                      >
+                        <div className="flex items-center gap-3">
+                          <Compass className="w-4 h-4 text-amber-700" />
+                          <span className="text-xs font-medium text-neutral-800">
+                            Set 17 Images for 3D Wheel
                           </span>
                         </div>
                         <ArrowRight className="w-3.5 h-3.5 text-neutral-400" />
@@ -1186,6 +1233,32 @@ export default function AdminPage() {
                 </button>
               </div>
 
+              <div className="p-4 rounded-2xl bg-amber-500/[0.08] border border-amber-500/25 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-2xs">
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 rounded-xl bg-amber-500/20 flex items-center justify-center shrink-0">
+                    <Compass className="w-4 h-4 text-amber-800" />
+                  </div>
+                  <div>
+                    <h4 className="text-xs font-semibold text-neutral-900">
+                      Interactive 3D Wheel: Exactly 17 Images Configured
+                    </h4>
+                    <p className="text-[11.5px] text-neutral-600">
+                      The rotating 3D circular wheel displays 17 curated images from your gallery. You can customize the exact 17 slots directly.
+                    </p>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setActiveTab("wheel-images")}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium bg-[#111111] text-white hover:bg-neutral-800 transition-colors shrink-0 shadow-xs cursor-pointer"
+                >
+                  <Compass className="w-3.5 h-3.5 text-amber-300" />
+                  <span>Configure 17 Wheel Photos</span>
+                  <ArrowRight className="w-3 h-3" />
+                </button>
+              </div>
+
               {/* Gallery Items Grid */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {formData.galleryItems.map((item, idx) => (
@@ -1274,6 +1347,224 @@ export default function AdminPage() {
               </div>
             </div>
           )}
+
+          {/* ═════════ TAB 6: 3D WHEEL IMAGES (17 IMAGES ONLY) ═════════ */}
+          {activeTab === "wheel-images" && (() => {
+            const wheelList: WheelImageItem[] = (formData.wheelImages && formData.wheelImages.length === 17)
+              ? (formData.wheelImages as WheelImageItem[])
+              : Array.from({ length: 17 }).map((_, idx) => {
+                  const existing = formData.wheelImages?.[idx];
+                  if (existing) return existing;
+                  const gal = formData.galleryItems?.[idx % (formData.galleryItems?.length || 1)];
+                  return {
+                    id: `wheel-${idx + 1}`,
+                    src: gal?.src || defaultContent.wheelImages[idx % defaultContent.wheelImages.length].src,
+                    title: gal?.title || defaultContent.wheelImages[idx % defaultContent.wheelImages.length].title,
+                    category: gal?.category || defaultContent.wheelImages[idx % defaultContent.wheelImages.length].category,
+                  };
+                });
+
+            const updateSlot = (idx: number, updates: Partial<WheelImageItem>) => {
+              const updated = [...wheelList];
+              updated[idx] = { ...updated[idx], ...updates };
+              setFormData({ ...formData, wheelImages: updated });
+            };
+
+            const syncFromGallery = () => {
+              if (!formData.galleryItems || formData.galleryItems.length === 0) return;
+              const synced: WheelImageItem[] = Array.from({ length: 17 }).map((_, idx) => {
+                const item = formData.galleryItems[idx % formData.galleryItems.length];
+                return {
+                  id: `wheel-${idx + 1}`,
+                  src: item.src,
+                  title: item.title,
+                  category: item.category,
+                };
+              });
+              setFormData({ ...formData, wheelImages: synced });
+              setSaveMessage("Populated all 17 3D wheel slots from current Gallery Archive photos!");
+              setTimeout(() => setSaveMessage(null), 4000);
+            };
+
+            const resetToCurated = () => {
+              setFormData({ ...formData, wheelImages: defaultContent.wheelImages });
+              setSaveMessage("Reset 17 3D wheel photos to the default curated set.");
+              setTimeout(() => setSaveMessage(null), 4000);
+            };
+
+            return (
+              <div className="space-y-6">
+                {/* Header Controls */}
+                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-black/[0.08] shadow-xs">
+                  <div>
+                    <div className="inline-flex items-center gap-2 rounded-full border border-black/[0.08] bg-neutral-100 py-1 px-3 text-[11px] font-mono uppercase tracking-wider text-neutral-600 mb-2">
+                      <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                      Strictly 17 Images Active in 3D Wheel
+                    </div>
+                    <h3 className="text-lg font-semibold text-[#111111]">
+                      Interactive 3D Wheel Showcase (17 Spatial Studies)
+                    </h3>
+                    <p className="text-xs text-neutral-500 mt-1 max-w-2xl leading-relaxed">
+                      The 3D rotating wheel before entering the gallery grid showcases exactly 17 images.
+                      Select from your Gallery Archive or customize each slot with your own images and titles below.
+                    </p>
+                  </div>
+
+                  <div className="flex flex-wrap items-center gap-2 shrink-0">
+                    <button
+                      type="button"
+                      onClick={syncFromGallery}
+                      className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-medium bg-[#111111] text-white hover:bg-neutral-800 transition-colors shadow-xs cursor-pointer"
+                    >
+                      <RefreshCw className="w-3.5 h-3.5 text-amber-300" />
+                      <span>Auto-Fill 17 from Gallery</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={resetToCurated}
+                      className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-mono border border-black/[0.1] bg-white text-neutral-700 hover:bg-neutral-50 transition-colors cursor-pointer"
+                    >
+                      <span>Reset to Curated 17</span>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Horizontal Quick-Thumb Strip */}
+                <div className="bg-white p-4 rounded-2xl border border-black/[0.08] shadow-xs overflow-x-auto">
+                  <div className="text-[11px] font-mono text-neutral-500 uppercase tracking-wider mb-2.5 flex items-center justify-between">
+                    <span>17 Active Wheel Slots Preview Strip</span>
+                    <span className="text-emerald-700 font-semibold">17 / 17 Filled</span>
+                  </div>
+                  <div className="flex items-center gap-2.5 min-w-max pb-1">
+                    {wheelList.map((item, idx) => (
+                      <div
+                        key={idx}
+                        className="flex flex-col items-center gap-1 p-1.5 rounded-xl border border-black/[0.08] bg-neutral-50 hover:bg-neutral-100 transition-colors"
+                      >
+                        <div className="w-12 h-14 rounded-lg overflow-hidden bg-neutral-200 border border-black/10 relative">
+                          <img
+                            src={item.src}
+                            alt=""
+                            className="w-full h-full object-cover"
+                          />
+                          <span className="absolute bottom-0 inset-x-0 bg-black/75 text-[9px] font-mono text-white text-center py-0.5">
+                            #{String(idx + 1).padStart(2, '0')}
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* 17 Detailed Slot Cards */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {wheelList.map((item, idx) => (
+                    <div
+                      key={item.id || idx}
+                      className="bg-white rounded-2xl border border-black/[0.08] p-4 shadow-xs flex flex-col justify-between space-y-3.5 hover:border-black/20 transition-all"
+                    >
+                      {/* Slot Header */}
+                      <div className="flex items-center justify-between">
+                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-[11px] font-mono font-bold bg-[#111111] text-white">
+                          Slot #{String(idx + 1).padStart(2, '0')} / 17
+                        </span>
+                        <span className="text-[10.5px] font-mono text-neutral-400">
+                          Interactive 3D Wheel
+                        </span>
+                      </div>
+
+                      {/* Image Thumbnail Preview */}
+                      <div className="relative h-44 rounded-xl overflow-hidden bg-neutral-100 border border-black/[0.08]">
+                        <img
+                          src={item.src}
+                          alt=""
+                          className="w-full h-full object-cover"
+                        />
+                        <span className="absolute bottom-2 left-2 px-2 py-0.5 rounded-md bg-black/70 text-white text-[10px] font-mono truncate max-w-[85%]">
+                          {item.category}
+                        </span>
+                      </div>
+
+                      {/* Controls */}
+                      <div className="space-y-2.5">
+                        {/* Pick from Gallery Dropdown */}
+                        <div>
+                          <label className="block text-[11px] font-mono text-neutral-600 font-medium mb-1">
+                            Choose from Gallery Photos:
+                          </label>
+                          <select
+                            value={item.src}
+                            onChange={(e) => {
+                              const chosen = formData.galleryItems?.find((g) => g.src === e.target.value);
+                              if (chosen) {
+                                updateSlot(idx, {
+                                  src: chosen.src,
+                                  title: chosen.title,
+                                  category: chosen.category,
+                                });
+                              } else if (e.target.value) {
+                                updateSlot(idx, { src: e.target.value });
+                              }
+                            }}
+                            className="w-full px-2.5 py-1.5 rounded-lg border border-black/[0.1] text-xs font-mono bg-neutral-50 hover:bg-white transition-colors"
+                          >
+                            <option value="">-- Or choose from Gallery --</option>
+                            {formData.galleryItems?.map((gal, gIdx) => (
+                              <option key={gal.id || gIdx} value={gal.src}>
+                                #{gIdx + 1}: {gal.title} ({gal.category})
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+
+                        {/* Title input */}
+                        <div>
+                          <label className="block text-[11px] font-mono text-neutral-600 font-medium mb-1">
+                            Card Title:
+                          </label>
+                          <input
+                            type="text"
+                            value={item.title}
+                            onChange={(e) => updateSlot(idx, { title: e.target.value })}
+                            placeholder="Architectural Study Title"
+                            className="w-full px-2.5 py-1.5 rounded-lg border border-black/[0.08] text-xs font-semibold"
+                          />
+                        </div>
+
+                        {/* Category Selector */}
+                        <div>
+                          <label className="block text-[11px] font-mono text-neutral-600 font-medium mb-1">
+                            Category:
+                          </label>
+                          <select
+                            value={item.category}
+                            onChange={(e) => updateSlot(idx, { category: e.target.value })}
+                            className="w-full px-2.5 py-1.5 rounded-lg border border-black/[0.08] text-[11px] font-mono bg-white"
+                          >
+                            <option value="Living Spaces">Living Spaces</option>
+                            <option value="Bedrooms">Bedrooms</option>
+                            <option value="Kitchens & Dining">Kitchens & Dining</option>
+                            <option value="Bathrooms">Bathrooms</option>
+                            <option value="Exterior Architecture">Exterior Architecture</option>
+                            <option value="3D Visualizations">3D Visualizations</option>
+                          </select>
+                        </div>
+
+                        {/* Device Image Picker */}
+                        <div className="pt-1">
+                          <DeviceImagePicker
+                            value={item.src}
+                            onChange={(url) => updateSlot(idx, { src: url })}
+                            label={`Slot #${idx + 1} Image`}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            );
+          })()}
 
           {/* ═════════ TAB 6: INQUIRY BOX (LEADS CRM) ═════════ */}
           {activeTab === "inquiries" && (

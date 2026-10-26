@@ -87,30 +87,6 @@ const GALLERY_ITEMS: GalleryImage[] = [
   },
 ];
 
-// Pool of 20 high-res gallery images for the dense 3D scroll morph
-const GALLERY_MORPH_IMAGES = [
-  "/images/studio/project-interior-1.jpeg",
-  "/images/project-1.jpg",
-  "/images/studio/project-interior-2.jpeg",
-  "/images/studio/project-interior-4.jpeg",
-  "/images/project-4.jpg",
-  "/images/studio/project-interior-5.jpeg",
-  "/images/project-2.jpg",
-  "/images/studio/project-interior-7.jpeg",
-  "/images/studio/project-interior-10.jpeg",
-  "/images/studio/project-interior-8.jpeg",
-  "/images/studio/project-interior-3.jpeg",
-  "/images/studio/project-interior-6.jpeg",
-  "/images/studio/project-interior-9.jpeg",
-  "/images/project-3.jpg",
-  "/images/gallery-1.jpg",
-  "/images/gallery-2.jpg",
-  "/images/gallery-3.jpg",
-  "/images/gallery-4.jpg",
-  "/images/manifesto.jpg",
-  "/images/hero.png",
-];
-
 export default function InteriorGallerySection() {
   const sectionRef = useRef<HTMLElement>(null);
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
@@ -137,15 +113,21 @@ export default function InteriorGallerySection() {
     ? allGalleryItems
     : allGalleryItems.filter((item) => item.category === selectedCategory);
 
-  // 20 high-res images for the dense 3D scroll-morph arc
-  const galleryMorphItemsData = GALLERY_MORPH_IMAGES.map((src, i) => {
-    const item = allGalleryItems[i % allGalleryItems.length];
-    return {
-      src,
-      title: item ? item.title : `Spatial Study ${i + 1}`,
-      category: item ? item.category : "Architecture",
-    };
-  });
+  // Exact 17 images for the 3D scroll-morph wheel, directly configured from admin
+  const wheelSource = (content?.wheelImages && content.wheelImages.length > 0)
+    ? content.wheelImages
+    : allGalleryItems;
+
+  const galleryMorphItemsData = React.useMemo(() => {
+    return Array.from({ length: 17 }).map((_, i) => {
+      const item = wheelSource[i % wheelSource.length];
+      return {
+        src: item?.src || "/images/project-1.jpg",
+        title: item?.title || `Spatial Study ${i + 1}`,
+        category: item?.category || "Living Spaces",
+      };
+    });
+  }, [wheelSource]);
 
   const getLenis = () => {
     return (window as unknown as { lenis?: { stop: () => void; start: () => void; scrollTo: (target: unknown, opts?: unknown) => void } }).lenis;
@@ -176,8 +158,17 @@ export default function InteriorGallerySection() {
   };
 
   const handleCardClick = (index: number) => {
-    const item = GALLERY_ITEMS[index % GALLERY_ITEMS.length];
-    if (item) setLightboxImage(item);
+    const morphItem = galleryMorphItemsData[index % galleryMorphItemsData.length];
+    if (morphItem) {
+      const match = allGalleryItems.find((g) => g.src === morphItem.src);
+      setLightboxImage({
+        id: match?.id || `wheel-${index}`,
+        src: morphItem.src,
+        title: morphItem.title,
+        category: (morphItem.category as any) || "Living Spaces",
+        description: match?.description || "Curated architectural study from our bespoke spatial archive.",
+      });
+    }
   };
 
   // ── REVERSE SCROLL HANDLER: When at top of gallery grid, scrolling UP returns to the 3D wheel effect ──

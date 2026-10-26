@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
-import CoverflowCarousel, {
-  type CoverflowCarouselItem,
-} from "@/components/ui/coverflow-carousel";
+import PerspectiveTunnelHero, {
+  type TunnelImageItem,
+} from "@/components/ui/perspective-tunnel-hero";
 import { useStore } from "@/store/useStore";
 import { VILLAS } from "@/data/villas";
 import { STUDIO_PROJECTS, StudioProject } from "@/data/projects-data";
@@ -27,36 +27,46 @@ export default function VillaCoverflowSection() {
   const { content } = useSiteContent();
   const featuredEstates = content?.featuredEstates || [];
 
-  const villaCarouselItems: CoverflowCarouselItem[] = featuredEstates.length > 0
-    ? featuredEstates.map((estate, idx) => ({
-        id: estate.villaId || `estate-${idx}`,
-        image: estate.image,
-        alt: `Estate ${estate.number}: ${estate.name} - ${estate.location}`,
-        content: (
-          <div className="flex flex-col items-center text-center">
-            <span className="text-xs font-mono text-neutral-400">Estate {estate.number}</span>
-            <span className="font-semibold text-neutral-900">{estate.name}</span>
-            <span className="text-[11px] text-neutral-500 font-mono mt-0.5">{estate.location}</span>
-          </div>
-        ),
-      }))
-    : VILLAS.map((villa, idx) => ({
-        id: villa.id,
-        image: `/images/project-${(idx % 4) + 1}.jpg`,
-        alt: `Estate ${villa.number}: ${villa.name} - ${villa.location}`,
-        content: (
-          <div className="flex flex-col items-center text-center">
-            <span className="text-xs font-mono text-neutral-400">Estate ${villa.number}</span>
-            <span className="font-semibold text-neutral-900">{villa.name}</span>
-            <span className="text-[11px] text-neutral-500 font-mono mt-0.5">{villa.location}</span>
-          </div>
-        ),
-      }));
-
   const currentModelIndex = useStore((s) => s.currentModelIndex);
   const setModelIndex = useStore((s) => s.setModelIndex);
   const setDetailsModalOpen = useStore((s) => s.setDetailsModalOpen);
   const setSelectedProjectId = useStore((s) => s.setSelectedProjectId);
+
+  const tunnelImages: TunnelImageItem[] = React.useMemo(() => {
+    const list: TunnelImageItem[] = [];
+    if (featuredEstates.length > 0) {
+      featuredEstates.forEach((e, i) => {
+        list.push({
+          id: e.villaId || `estate-${i}`,
+          title: e.name,
+          subtitle: `Estate ${e.number || `0${i + 1}`} • ${e.location}`,
+          src: e.image,
+        });
+      });
+    } else {
+      VILLAS.forEach((v, i) => {
+        list.push({
+          id: v.id,
+          title: v.name,
+          subtitle: `Estate ${v.number} • ${v.location}`,
+          src: `/images/project-${(i % 4) + 1}.jpg`,
+        });
+      });
+    }
+
+    STUDIO_PROJECTS.forEach((p) => {
+      if (list.length < 10) {
+        list.push({
+          id: p.id,
+          title: p.title,
+          subtitle: `${p.category} • ${p.location}`,
+          src: p.coverImage,
+        });
+      }
+    });
+
+    return list;
+  }, [featuredEstates]);
 
   const [activeCategory, setActiveCategory] = useState<string>("All");
 
@@ -97,13 +107,23 @@ export default function VillaCoverflowSection() {
     <section
       id="villas"
       aria-labelledby="estates-coverflow-heading"
-      style={{
-        paddingTop: "6rem",
-        paddingBottom: "6.5rem",
-      }}
       className="relative w-full bg-[#f5f4f2] text-[#111111] border-t border-black/[0.07]"
     >
       <div id="projects" className="sr-only" />
+
+      {/* ── STICKY PINNED 3D PERSPECTIVE TUNNEL (Screen stays stuck until flight completes) ── */}
+      <PerspectiveTunnelHero
+        images={tunnelImages}
+        eyebrow="Curated Architectural Portfolio"
+        title={"Featured Estates\n& Residences"}
+        description="Explore our curated portfolio of bespoke villas, contemporary residences, and high-fidelity 3D spatial twins. Scroll to travel through the spatial corridor."
+        sticky={true}
+        trackHeight="260vh"
+        onSelect={(_, idx) => {
+          const villaIdx = idx % VILLAS.length;
+          handleView3D(villaIdx);
+        }}
+      />
 
       <div
         style={{
@@ -112,61 +132,11 @@ export default function VillaCoverflowSection() {
           marginRight: "auto",
           paddingLeft: "clamp(1.5rem, 5vw, 3.5rem)",
           paddingRight: "clamp(1.5rem, 5vw, 3.5rem)",
+          paddingTop: "5rem",
+          paddingBottom: "6.5rem",
         }}
         className="w-full flex flex-col items-center"
       >
-        {/* Section Header */}
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-60px" }}
-          className="w-full flex flex-col items-center text-center"
-        >
-          {/* Pill Eyebrow */}
-          <motion.div
-            custom={0}
-            variants={fadeUp}
-            className="inline-flex items-center gap-2 rounded-full border border-black/[0.08] bg-white/80 py-1 px-3 text-[12px] font-mono uppercase tracking-widest text-neutral-600 shadow-2xs backdrop-blur-sm"
-          >
-            <span className="w-1.5 h-1.5 rounded-full bg-[#111111]" />
-            Curated Architectural Portfolio
-          </motion.div>
-
-          <motion.h2
-            custom={1}
-            variants={fadeUp}
-            id="estates-coverflow-heading"
-            className="mt-5 text-[32px] sm:text-[42px] lg:text-[48px] font-semibold leading-[1.08] tracking-[-0.04em] text-[#111111]"
-          >
-            Featured Estates & Residences
-          </motion.h2>
-          <motion.p
-            custom={2}
-            variants={fadeUp}
-            className="mt-3 max-w-[560px] text-[15px] text-neutral-600 leading-relaxed"
-          >
-            Explore our curated portfolio of bespoke villas, contemporary residences, and high-fidelity 3D spatial twins. Select any estate to synchronize the interactive 3D digital model above or inspect the complete architectural dossier.
-          </motion.p>
-        </motion.div>
-
-        {/* 3D Coverflow Carousel */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="mt-8 w-full max-w-4xl"
-        >
-          <CoverflowCarousel
-            items={villaCarouselItems}
-            index={currentModelIndex}
-            onIndexChange={handleIndexChange}
-            depth={200}
-            rotation={42}
-            spacing={240}
-            loop
-          />
-        </motion.div>
 
 
         {/* ── Category Filter Tabs ── */}

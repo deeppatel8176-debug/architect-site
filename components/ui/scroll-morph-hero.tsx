@@ -100,7 +100,7 @@ function FlipCard({
   );
 }
 
-// --- Default 20 High-Res Architecture Images ---
+// --- Default 17 High-Res Architecture Images ---
 export const DEFAULT_GALLERY_IMAGES = [
   "/images/studio/project-interior-1.jpeg",
   "/images/project-1.jpg",
@@ -119,9 +119,6 @@ export const DEFAULT_GALLERY_IMAGES = [
   "/images/gallery-1.jpg",
   "/images/gallery-2.jpg",
   "/images/gallery-3.jpg",
-  "/images/gallery-4.jpg",
-  "/images/manifesto.jpg",
-  "/images/hero.png",
 ];
 
 export const MAX_SCROLL = 2000; // Virtual scroll distance for full, comfortable rotation
@@ -149,7 +146,7 @@ export default function IntroAnimation({
   title = "Spatial details & tactile craft.",
   subtitle = "SCROLL DOWN WHEEL TO ROTATE & ENTER GALLERY",
   arcTitle = "Curated Architectural Twin",
-  arcSubtitle = "Rotate through our spatial studies — scroll completes directly into the complete photographic archive.",
+  arcSubtitle = "Rotate through our 17 spatial studies — scroll completes directly into the complete photographic archive.",
   onScrollProgress,
   onComplete,
   onSelectImage,
@@ -159,18 +156,21 @@ export default function IntroAnimation({
   const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Normalize image items (20 items for dense, full arc)
+  // Normalize image items to exactly 17 items for balanced 3D circle and arc
   const activeItems = useMemo<GalleryItemData[]>(() => {
-    if (items && items.length > 0) return items;
-    const imgList = images && images.length > 0 ? images : DEFAULT_GALLERY_IMAGES;
-    return imgList.map((src, idx) => ({
-      src,
-      title: `Architectural Study ${idx + 1}`,
-      category: "Commission",
-    }));
+    const list = items && items.length > 0
+      ? items
+      : (images && images.length > 0 ? images : DEFAULT_GALLERY_IMAGES).map((src, idx) => ({
+          src,
+          title: `Architectural Study ${idx + 1}`,
+          category: "Commission",
+        }));
+
+    // Ensure strictly 17 items
+    return Array.from({ length: 17 }).map((_, idx) => list[idx % list.length]);
   }, [items, images]);
 
-  const totalCount = activeItems.length;
+  const totalCount = 17;
 
   // --- Container Size ---
   useEffect(() => {
