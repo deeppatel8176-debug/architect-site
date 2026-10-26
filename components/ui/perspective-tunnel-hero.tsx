@@ -281,27 +281,14 @@ export default function PerspectiveTunnelHero({
                 </p>
             </motion.div>
 
-            {/* Scroll Indicator Prompt with Active Progress */}
-            <div className="pointer-events-none absolute bottom-8 z-20 flex flex-col items-center gap-2.5">
-                <motion.div
-                    style={{ opacity: promptOpacity }}
-                    className="flex flex-col items-center gap-1.5 text-xs font-mono uppercase tracking-[0.25em] text-neutral-500"
-                >
-                    <span>Scroll To Fly Through Estates</span>
-                    <div className="h-5 w-px bg-gradient-to-b from-neutral-800 to-transparent" />
-                </motion.div>
-
-                {/* Light Minimal Progress Bar */}
-                <div className="flex items-center gap-3 bg-white/90 border border-black/[0.08] px-4 py-2 rounded-full shadow-xs backdrop-blur-sm">
-                    <span className="text-[11px] font-mono text-neutral-500 uppercase">Corridor Depth</span>
-                    <div className="w-28 sm:w-40 h-1.5 bg-neutral-200 rounded-full overflow-hidden">
-                        <motion.div
-                            style={{ scaleX: smoothProgress, transformOrigin: "left" }}
-                            className="h-full bg-[#111111] rounded-full"
-                        />
-                    </div>
-                </div>
-            </div>
+            {/* Scroll Indicator Prompt */}
+            <motion.div
+                style={{ opacity: promptOpacity }}
+                className="pointer-events-none absolute bottom-8 z-20 flex flex-col items-center gap-1.5 text-xs font-mono uppercase tracking-[0.25em] text-neutral-500"
+            >
+                <span>Scroll To Fly Through Estates</span>
+                <div className="h-5 w-px bg-gradient-to-b from-neutral-800 to-transparent" />
+            </motion.div>
 
             {/* 3D Z-Space Plane */}
             <div
